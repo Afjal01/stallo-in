@@ -1,0 +1,148 @@
+// Version: 1.0.0
+type ApprovalStatus__944573617 = {#approved; #pending; #rejected};
+type BookingId__572944220 = Text;
+type BookingStatus__96719981 =
+  {#cancelled; #completed; #confirmed; #dispatched; #pending; #preparing};
+type Booking__628731632 =
+  {
+    advanceAmount : Nat;
+    bookingStatus : BookingStatus__96719981;
+    cancellationFeePercent : Nat;
+    createdAt : Timestamp__301639476;
+    customerId : UserId__158757552;
+    eventDate : Timestamp__301639476;
+    eventVenue : Text;
+    guestCount : Nat;
+    id : BookingId__572944220;
+    notes : ?Text;
+    packageId : PackageId__581373409;
+    paymentStatus : PaymentStatus__1050999476;
+    stripePaymentIntentId : ?Text;
+    totalPrice : Nat;
+    updatedAt : Timestamp__301639476;
+    vendorId : VendorId__100918361
+  };
+type CancellationPolicy__977310333 =
+  {
+    tier1Days : Nat;
+    tier1FeePercent : Nat;
+    tier2Days : Nat;
+    tier2FeePercent : Nat;
+    tier3FeePercent : Nat
+  };
+type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__671167343 = Blob;
+type Internal__667636161<T> =
+  {children : [var ?Node__92254746<T>]; data : Data__159895909<T>};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__520550824<T> = {data : Data__159895909<T>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Node__92254746<T> =
+  {#internal : Internal__667636161<T>; #leaf : Leaf__520550824<T>};
+type PackageId__581373409 = Text;
+type PaymentStatus__1050999476 =
+  {#failed; #paid; #partiallyPaid; #pending; #refunded};
+type PlatformConfig__1027619146 =
+  {
+    advancePaymentPercent : Nat;
+    cancellationPolicy : CancellationPolicy__977310333;
+    globalCommissionPercent : Float
+  };
+type ReviewId__496285678 = Text;
+type Review__174614173 =
+  {
+    bookingId : BookingId__572944220;
+    comment : Text;
+    createdAt : Timestamp__301639476;
+    customerId : UserId__158757552;
+    id : ReviewId__496285678;
+    rating : Nat;
+    vendorId : VendorId__100918361
+  };
+type Set__532252804<T> = Set__710576254<T>;
+type Set__710576254<T> =
+  {var root : Node__92254746<T>; var size : Nat__490723111};
+type StallPackage__992121620 =
+  {
+    guestMax : Nat;
+    guestMin : Nat;
+    id : PackageId__581373409;
+    inclusions : [Text];
+    isActive : Bool;
+    name : Text;
+    price : Nat;
+    setupCharge : Nat;
+    travelCharge : Nat;
+    vendorId : VendorId__100918361
+  };
+type StripeConfiguration__87721349 =
+  {allowedCountries : [Text]; secretKey : Text};
+type Timestamp__301639476 = Int;
+type UserId__158757552 = Principal;
+type UserRole__1073662873 = {#admin; #guest; #user};
+type VendorId__100918361 = Text;
+type VendorStatus__902068017 = {#approved; #pending; #rejected; #suspended};
+type Vendor__717819561 =
+  {
+    businessName : Text;
+    category : Text;
+    commissionRate : Float;
+    createdAt : Timestamp__301639476;
+    description : Text;
+    email : Text;
+    id : VendorId__100918361;
+    isFeatured : Bool;
+    ownerId : UserId__158757552;
+    ownerName : Text;
+    phone : Text;
+    photos : [ExternalBlob__671167343];
+    rating : Float;
+    reviewCount : Nat;
+    serviceArea : Text;
+    verificationStatus : VendorStatus__902068017
+  };
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable approvalState :
+    {
+      var approvalStatus :
+        Map__605269027<Principal, ApprovalStatus__944573617>
+    };
+  stable bookingState :
+    {
+      bookings : Map__605269027<BookingId__572944220, Booking__628731632>;
+      config : {var platformConfig : PlatformConfig__1027619146};
+      counter : {var nextId : Nat};
+      reviews : Map__605269027<ReviewId__496285678, Review__174614173>
+    };
+  stable packageState :
+    {
+      counter : {var nextId : Nat};
+      packages :
+        Map__605269027<PackageId__581373409, StallPackage__992121620>
+    };
+  stable var stripeConfiguration : ?StripeConfiguration__87721349;
+  stable vendorState :
+    {
+      counter : {var nextId : Nat};
+      unavailableDates :
+        Map__605269027<VendorId__100918361,
+                        Set__532252804<Timestamp__301639476>>;
+      vendors : Map__605269027<VendorId__100918361, Vendor__717819561>
+    }
+};

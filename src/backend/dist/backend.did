@@ -1,0 +1,330 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type VendorStatus = 
+ variant {
+   approved;
+   pending;
+   rejected;
+   suspended;
+ };
+type VendorId = text;
+type VendorFilter = 
+ record {
+   category: opt text;
+   featured: opt bool;
+   serviceArea: opt text;
+   status: opt VendorStatus;
+ };
+type Vendor = 
+ record {
+   businessName: text;
+   category: text;
+   commissionRate: float64;
+   createdAt: Timestamp;
+   description: text;
+   email: text;
+   id: VendorId;
+   isFeatured: bool;
+   ownerId: UserId;
+   ownerName: text;
+   phone: text;
+   photos: vec ExternalBlob;
+   rating: float64;
+   reviewCount: nat;
+   serviceArea: text;
+   verificationStatus: VendorStatus;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserId = principal;
+type UserApprovalInfo = 
+ record {
+   "principal": principal;
+   status: ApprovalStatus;
+ };
+type UpdateVendorRequest = 
+ record {
+   businessName: opt text;
+   category: opt text;
+   description: opt text;
+   email: opt text;
+   ownerName: opt text;
+   phone: opt text;
+   photos: opt vec ExternalBlob;
+   serviceArea: opt text;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Timestamp = int;
+type StripeSessionStatus = 
+ variant {
+   completed: record {
+                response: text;
+                userPrincipal: opt text;
+              };
+   failed: record {error: text;};
+ };
+type StripeConfiguration = 
+ record {
+   allowedCountries: vec text;
+   secretKey: text;
+ };
+type StallPackage = 
+ record {
+   guestMax: nat;
+   guestMin: nat;
+   id: PackageId;
+   inclusions: vec text;
+   isActive: bool;
+   name: text;
+   price: nat;
+   setupCharge: nat;
+   travelCharge: nat;
+   vendorId: VendorId;
+ };
+type ShoppingItem = 
+ record {
+   currency: text;
+   priceInCents: nat;
+   productDescription: text;
+   productName: text;
+   quantity: nat;
+ };
+type ReviewId = text;
+type Review = 
+ record {
+   bookingId: BookingId;
+   comment: text;
+   createdAt: Timestamp;
+   customerId: UserId;
+   id: ReviewId;
+   rating: nat;
+   vendorId: VendorId;
+ };
+type PlatformConfig = 
+ record {
+   advancePaymentPercent: nat;
+   cancellationPolicy: CancellationPolicy;
+   globalCommissionPercent: float64;
+ };
+type PaymentStatus = 
+ variant {
+   failed;
+   paid;
+   partiallyPaid;
+   pending;
+   refunded;
+ };
+type PackageId = text;
+type ExternalBlob = blob;
+type DateRangeResult = 
+ record {
+   count: nat;
+   date: Timestamp;
+   revenue: nat;
+ };
+type CreateVendorRequest = 
+ record {
+   businessName: text;
+   category: text;
+   description: text;
+   email: text;
+   ownerName: text;
+   phone: text;
+   photos: vec ExternalBlob;
+   serviceArea: text;
+ };
+type CreateBookingRequest = 
+ record {
+   eventDate: Timestamp;
+   eventVenue: text;
+   guestCount: nat;
+   notes: opt text;
+   packageId: PackageId;
+   vendorId: VendorId;
+ };
+type CancellationPolicy = 
+ record {
+   tier1Days: nat;
+   tier1FeePercent: nat;
+   tier2Days: nat;
+   tier2FeePercent: nat;
+   tier3FeePercent: nat;
+ };
+type BookingStatus = 
+ variant {
+   cancelled;
+   completed;
+   confirmed;
+   dispatched;
+   pending;
+   preparing;
+ };
+type BookingId = text;
+type BookingFilter = 
+ record {
+   customerId: opt UserId;
+   fromDate: opt Timestamp;
+   status: opt BookingStatus;
+   toDate: opt Timestamp;
+   vendorId: opt VendorId;
+ };
+type Booking = 
+ record {
+   advanceAmount: nat;
+   bookingStatus: BookingStatus;
+   cancellationFeePercent: nat;
+   createdAt: Timestamp;
+   customerId: UserId;
+   eventDate: Timestamp;
+   eventVenue: text;
+   guestCount: nat;
+   id: BookingId;
+   notes: opt text;
+   packageId: PackageId;
+   paymentStatus: PaymentStatus;
+   stripePaymentIntentId: opt text;
+   totalPrice: nat;
+   updatedAt: Timestamp;
+   vendorId: VendorId;
+ };
+type ApprovalStatus = 
+ variant {
+   approved;
+   pending;
+   rejected;
+ };
+type AnalyticsSummary = 
+ record {
+   activeVendors: nat;
+   cancelledBookings: nat;
+   commissionRevenue: nat;
+   completedBookings: nat;
+   totalBookings: nat;
+   totalCustomers: nat;
+   totalRevenue: nat;
+   totalVendors: nat;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  approveVendor: (vendorId: VendorId, commissionRate: float64) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  calculateCancellationFee: (bookingId: BookingId) -> (nat) query;
+  cancelBooking: (bookingId: BookingId) -> (Booking);
+  confirmPayment: (bookingId: BookingId, paymentIntentId: text) -> (Booking);
+  createBooking: (req: CreateBookingRequest) -> (Booking);
+  createCheckoutSession: (items: vec ShoppingItem, successUrl: text,
+   cancelUrl: text) -> (text);
+  createPackage: (vendorId: VendorId, pkg:
+   record {
+     guestMax: nat;
+     guestMin: nat;
+     inclusions: vec text;
+     name: text;
+     price: nat;
+     setupCharge: nat;
+     travelCharge: nat;
+   }) -> (StallPackage);
+  createReview: (bookingId: BookingId, rating: nat, comment: text) ->
+   (Review);
+  createVendorProfile: (req: CreateVendorRequest) -> (Vendor);
+  deletePackage: (packageId: PackageId) -> ();
+  getAnalyticsSummary: () -> (AnalyticsSummary) query;
+  getBooking: (bookingId: BookingId) -> (opt Booking) query;
+  getBookingsByDateRange: (from: Timestamp, to: Timestamp) ->
+   (vec DateRangeResult) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getPackage: (packageId: PackageId) -> (opt StallPackage) query;
+  getPlatformConfig: () -> (PlatformConfig) query;
+  getRevenueByDateRange: (from: Timestamp, to: Timestamp) ->
+   (vec DateRangeResult) query;
+  getReviewsByVendor: (vendorId: VendorId) -> (vec Review) query;
+  getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
+  getUnavailableDates: (vendorId: VendorId) -> (vec Timestamp) query;
+  getVendor: (vendorId: VendorId) -> (opt Vendor) query;
+  isCallerAdmin: () -> (bool) query;
+  isCallerApproved: () -> (bool) query;
+  isStripeConfigured: () -> (bool) query;
+  listApprovals: () -> (vec UserApprovalInfo) query;
+  listBookings: (filter: BookingFilter) -> (vec Booking) query;
+  listPackagesByVendor: (vendorId: VendorId) -> (vec StallPackage) query;
+  listVendors: (filter: VendorFilter) -> (vec Vendor) query;
+  markUnavailableDate: (vendorId: VendorId, date: Timestamp) -> ();
+  processRefund: (bookingId: BookingId) -> ();
+  rejectVendor: (vendorId: VendorId) -> ();
+  requestApproval: () -> ();
+  sendBookingConfirmationEmail: (bookingId: BookingId, recipientEmail: 
+   text, customerName: text) -> ();
+  sendCancellationEmail: (bookingId: BookingId, recipientEmail: text,
+   customerName: text, refundAmount: nat) -> ();
+  sendNewBookingNotificationToVendor: (vendorEmail: text, vendorName: 
+   text, bookingId: BookingId) -> ();
+  sendPaymentConfirmationEmail: (bookingId: BookingId, recipientEmail: 
+   text, customerName: text, amount: nat) -> ();
+  sendVendorApprovalEmail: (vendorEmail: text, vendorName: text, approved:
+   bool) -> ();
+  setApproval: (user: principal, status: ApprovalStatus) -> ();
+  setStripeConfiguration: (config: StripeConfiguration) -> ();
+  toggleFeatured: (vendorId: VendorId) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateBookingStatus: (bookingId: BookingId, status: BookingStatus) ->
+   (Booking);
+  updatePackage: (packageId: PackageId, pkg:
+   record {
+     guestMax: opt nat;
+     guestMin: opt nat;
+     inclusions: opt vec text;
+     isActive: opt bool;
+     name: opt text;
+     price: opt nat;
+     setupCharge: opt nat;
+     travelCharge: opt nat;
+   }) -> (StallPackage);
+  updatePlatformConfig: (config: PlatformConfig) -> ();
+  updateVendorProfile: (vendorId: VendorId, req: UpdateVendorRequest) ->
+   (Vendor);
+}

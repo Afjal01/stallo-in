@@ -1,0 +1,27 @@
+{
+  "overview": "Stallo.in is a premium enterprise-grade wedding food stall booking marketplace for Nawada, Bihar. It connects customers with verified stall vendors (chaat, golgappa, dosa, ice cream, mocktails, and more) through a trusted platform with transparent pricing, smooth 5-step booking, and real order tracking across three role-based dashboards.",
+  "features": [
+    "Premium landing page with hero, categories, featured vendors, how-it-works, and testimonials",
+    "Browse stalls with search, category/price/location filters, and verified vendor badges",
+    "5-step booking flow: package selection, date/venue, guests, price review, Stripe payment",
+    "Admin dashboard with KPI cards, vendor approval queue, analytics charts, and commission settings",
+    "Vendor dashboard with order management, package CRUD, earnings summary, and image uploads",
+    "Customer dashboard with bookings, reviews, saved vendors, and booking receipts",
+    "Vendor self-registration with admin approval workflow and email notifications",
+    "Tiered cancellation policy logic with fee calculation and refund processing",
+    "Role-based access control via authorization extension with Internet Identity login",
+    "Email notifications for all key events: booking, payment, approvals, cancellations"
+  ],
+  "category": "marketplace",
+  "tags": [
+    "wedding",
+    "food-stalls",
+    "booking",
+    "marketplace",
+    "vendor-management",
+    "multi-role",
+    "bihar",
+    "enterprise"
+  ],
+  "last_updated": "2026-05-14T21:45:28.121Z"
+}
