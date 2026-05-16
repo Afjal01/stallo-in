@@ -120,7 +120,7 @@ export default function CustomerBookingDetailPage() {
         {/* Main detail card */}
         <div className="lg:col-span-2 space-y-5">
           {/* Header */}
-          <div className="rounded-xl border border-border/60 bg-card p-6">
+          <div className="glass-card rounded-xl border border-border/60 bg-card p-6">
             <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
               <div>
                 <h2 className="font-display font-bold text-xl">
@@ -163,7 +163,7 @@ export default function CustomerBookingDetailPage() {
           </div>
 
           {/* Price breakdown */}
-          <div className="rounded-xl border border-border/60 bg-card p-6">
+          <div className="glass-card rounded-xl border border-border/60 bg-card p-6">
             <h3 className="font-display font-semibold text-base mb-4">
               Price Breakdown
             </h3>
@@ -181,7 +181,7 @@ export default function CustomerBookingDetailPage() {
               <Separator />
               <div className="flex justify-between font-semibold">
                 <span>Total Amount</span>
-                <span className="text-primary text-base">
+                <span className="text-primary text-lg font-bold">
                   {formatPrice(booking.totalPrice)}
                 </span>
               </div>
@@ -231,7 +231,7 @@ export default function CustomerBookingDetailPage() {
                     value={reviewComment}
                     onChange={(e) => setReviewComment(e.target.value)}
                     rows={3}
-                    className="mt-1 resize-none"
+                    className="mt-1 resize-none focus:ring-primary/50 focus:border-primary/50"
                     data-ocid="booking_detail.review_textarea"
                   />
                 </div>
@@ -260,7 +260,7 @@ export default function CustomerBookingDetailPage() {
         <div className="space-y-5">
           {/* Status timeline */}
           {booking.bookingStatus !== BookingStatus.cancelled && (
-            <div className="rounded-xl border border-border/60 bg-card p-5">
+            <div className="glass-card rounded-xl border border-border/60 bg-card p-5">
               <h3 className="font-display font-semibold text-sm mb-4">
                 Booking Progress
               </h3>
@@ -304,7 +304,7 @@ export default function CustomerBookingDetailPage() {
           )}
 
           {/* Actions */}
-          <div className="rounded-xl border border-border/60 bg-card p-5 space-y-3">
+          <div className="glass-card rounded-xl border border-border/60 bg-card p-5 space-y-3">
             <h3 className="font-display font-semibold text-sm">Actions</h3>
             <Button
               variant="outline"
@@ -332,7 +332,7 @@ export default function CustomerBookingDetailPage() {
 
           {/* Cancellation fee warning */}
           {canCancel && (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-900/10 dark:border-amber-800/30 p-4">
+            <div className="rounded-xl border-l-4 border-amber-500/60 border border-amber-200 bg-amber-50 dark:bg-amber-900/10 dark:border-amber-800/30 p-4">
               <div className="flex items-start gap-2">
                 <AlertTriangle className="size-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                 <div className="text-xs">

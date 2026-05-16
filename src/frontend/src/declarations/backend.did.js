@@ -55,6 +55,8 @@ export const Booking = IDL.Record({
   'advanceAmount' : IDL.Nat,
   'vendorId' : VendorId,
   'notes' : IDL.Opt(IDL.Text),
+  'vendorPayout' : IDL.Nat,
+  'commissionAmount' : IDL.Nat,
   'eventVenue' : IDL.Text,
   'customerId' : UserId,
   'stripePaymentIntentId' : IDL.Opt(IDL.Text),
@@ -134,10 +136,18 @@ export const Vendor = IDL.Record({
   'verificationStatus' : VendorStatus,
   'photos' : IDL.Vec(ExternalBlob),
 });
+export const VendorBookingStat = IDL.Record({
+  'revenue' : IDL.Nat,
+  'vendorId' : VendorId,
+  'vendorName' : IDL.Text,
+  'bookingCount' : IDL.Nat,
+});
 export const AnalyticsSummary = IDL.Record({
   'commissionRevenue' : IDL.Nat,
+  'vendorPayouts' : IDL.Nat,
   'cancelledBookings' : IDL.Nat,
   'totalBookings' : IDL.Nat,
+  'topVendors' : IDL.Vec(VendorBookingStat),
   'completedBookings' : IDL.Nat,
   'totalRevenue' : IDL.Nat,
   'totalCustomers' : IDL.Nat,
@@ -148,6 +158,12 @@ export const DateRangeResult = IDL.Record({
   'revenue' : IDL.Nat,
   'date' : Timestamp,
   'count' : IDL.Nat,
+});
+export const CategoryBreakdown = IDL.Record({
+  'categoryId' : IDL.Text,
+  'revenue' : IDL.Nat,
+  'categoryName' : IDL.Text,
+  'bookingCount' : IDL.Nat,
 });
 export const CancellationPolicy = IDL.Record({
   'tier1Days' : IDL.Nat,
@@ -184,11 +200,23 @@ export const BookingFilter = IDL.Record({
   'fromDate' : IDL.Opt(Timestamp),
   'customerId' : IDL.Opt(UserId),
 });
+export const PagedBookings = IDL.Record({
+  'total' : IDL.Nat,
+  'offset' : IDL.Nat,
+  'limit' : IDL.Nat,
+  'items' : IDL.Vec(Booking),
+});
 export const VendorFilter = IDL.Record({
   'serviceArea' : IDL.Opt(IDL.Text),
   'status' : IDL.Opt(VendorStatus),
   'featured' : IDL.Opt(IDL.Bool),
   'category' : IDL.Opt(IDL.Text),
+});
+export const PagedVendors = IDL.Record({
+  'total' : IDL.Nat,
+  'offset' : IDL.Nat,
+  'limit' : IDL.Nat,
+  'items' : IDL.Vec(Vendor),
 });
 export const StripeConfiguration = IDL.Record({
   'allowedCountries' : IDL.Vec(IDL.Text),
@@ -284,15 +312,20 @@ export const idlService = IDL.Service({
   'getAnalyticsSummary' : IDL.Func([], [AnalyticsSummary], ['query']),
   'getBooking' : IDL.Func([BookingId], [IDL.Opt(Booking)], ['query']),
   'getBookingsByDateRange' : IDL.Func(
-      [Timestamp, Timestamp],
+      [Timestamp, Timestamp, IDL.Opt(IDL.Text)],
       [IDL.Vec(DateRangeResult)],
       ['query'],
     ),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getCategoryBreakdown' : IDL.Func(
+      [],
+      [IDL.Vec(CategoryBreakdown)],
+      ['query'],
+    ),
   'getPackage' : IDL.Func([PackageId], [IDL.Opt(StallPackage)], ['query']),
   'getPlatformConfig' : IDL.Func([], [PlatformConfig], ['query']),
   'getRevenueByDateRange' : IDL.Func(
-      [Timestamp, Timestamp],
+      [Timestamp, Timestamp, IDL.Opt(IDL.Text)],
       [IDL.Vec(DateRangeResult)],
       ['query'],
     ),
@@ -304,13 +337,21 @@ export const idlService = IDL.Service({
   'isCallerApproved' : IDL.Func([], [IDL.Bool], ['query']),
   'isStripeConfigured' : IDL.Func([], [IDL.Bool], ['query']),
   'listApprovals' : IDL.Func([], [IDL.Vec(UserApprovalInfo)], ['query']),
-  'listBookings' : IDL.Func([BookingFilter], [IDL.Vec(Booking)], ['query']),
+  'listBookings' : IDL.Func(
+      [BookingFilter, IDL.Nat, IDL.Nat],
+      [PagedBookings],
+      ['query'],
+    ),
   'listPackagesByVendor' : IDL.Func(
       [VendorId],
       [IDL.Vec(StallPackage)],
       ['query'],
     ),
-  'listVendors' : IDL.Func([VendorFilter], [IDL.Vec(Vendor)], ['query']),
+  'listVendors' : IDL.Func(
+      [VendorFilter, IDL.Nat, IDL.Nat],
+      [PagedVendors],
+      ['query'],
+    ),
   'markUnavailableDate' : IDL.Func([VendorId, Timestamp], [], []),
   'processRefund' : IDL.Func([BookingId], [], []),
   'rejectVendor' : IDL.Func([VendorId], [], []),
@@ -420,6 +461,8 @@ export const idlFactory = ({ IDL }) => {
     'advanceAmount' : IDL.Nat,
     'vendorId' : VendorId,
     'notes' : IDL.Opt(IDL.Text),
+    'vendorPayout' : IDL.Nat,
+    'commissionAmount' : IDL.Nat,
     'eventVenue' : IDL.Text,
     'customerId' : UserId,
     'stripePaymentIntentId' : IDL.Opt(IDL.Text),
@@ -499,10 +542,18 @@ export const idlFactory = ({ IDL }) => {
     'verificationStatus' : VendorStatus,
     'photos' : IDL.Vec(ExternalBlob),
   });
+  const VendorBookingStat = IDL.Record({
+    'revenue' : IDL.Nat,
+    'vendorId' : VendorId,
+    'vendorName' : IDL.Text,
+    'bookingCount' : IDL.Nat,
+  });
   const AnalyticsSummary = IDL.Record({
     'commissionRevenue' : IDL.Nat,
+    'vendorPayouts' : IDL.Nat,
     'cancelledBookings' : IDL.Nat,
     'totalBookings' : IDL.Nat,
+    'topVendors' : IDL.Vec(VendorBookingStat),
     'completedBookings' : IDL.Nat,
     'totalRevenue' : IDL.Nat,
     'totalCustomers' : IDL.Nat,
@@ -513,6 +564,12 @@ export const idlFactory = ({ IDL }) => {
     'revenue' : IDL.Nat,
     'date' : Timestamp,
     'count' : IDL.Nat,
+  });
+  const CategoryBreakdown = IDL.Record({
+    'categoryId' : IDL.Text,
+    'revenue' : IDL.Nat,
+    'categoryName' : IDL.Text,
+    'bookingCount' : IDL.Nat,
   });
   const CancellationPolicy = IDL.Record({
     'tier1Days' : IDL.Nat,
@@ -549,11 +606,23 @@ export const idlFactory = ({ IDL }) => {
     'fromDate' : IDL.Opt(Timestamp),
     'customerId' : IDL.Opt(UserId),
   });
+  const PagedBookings = IDL.Record({
+    'total' : IDL.Nat,
+    'offset' : IDL.Nat,
+    'limit' : IDL.Nat,
+    'items' : IDL.Vec(Booking),
+  });
   const VendorFilter = IDL.Record({
     'serviceArea' : IDL.Opt(IDL.Text),
     'status' : IDL.Opt(VendorStatus),
     'featured' : IDL.Opt(IDL.Bool),
     'category' : IDL.Opt(IDL.Text),
+  });
+  const PagedVendors = IDL.Record({
+    'total' : IDL.Nat,
+    'offset' : IDL.Nat,
+    'limit' : IDL.Nat,
+    'items' : IDL.Vec(Vendor),
   });
   const StripeConfiguration = IDL.Record({
     'allowedCountries' : IDL.Vec(IDL.Text),
@@ -646,15 +715,20 @@ export const idlFactory = ({ IDL }) => {
     'getAnalyticsSummary' : IDL.Func([], [AnalyticsSummary], ['query']),
     'getBooking' : IDL.Func([BookingId], [IDL.Opt(Booking)], ['query']),
     'getBookingsByDateRange' : IDL.Func(
-        [Timestamp, Timestamp],
+        [Timestamp, Timestamp, IDL.Opt(IDL.Text)],
         [IDL.Vec(DateRangeResult)],
         ['query'],
       ),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getCategoryBreakdown' : IDL.Func(
+        [],
+        [IDL.Vec(CategoryBreakdown)],
+        ['query'],
+      ),
     'getPackage' : IDL.Func([PackageId], [IDL.Opt(StallPackage)], ['query']),
     'getPlatformConfig' : IDL.Func([], [PlatformConfig], ['query']),
     'getRevenueByDateRange' : IDL.Func(
-        [Timestamp, Timestamp],
+        [Timestamp, Timestamp, IDL.Opt(IDL.Text)],
         [IDL.Vec(DateRangeResult)],
         ['query'],
       ),
@@ -670,13 +744,21 @@ export const idlFactory = ({ IDL }) => {
     'isCallerApproved' : IDL.Func([], [IDL.Bool], ['query']),
     'isStripeConfigured' : IDL.Func([], [IDL.Bool], ['query']),
     'listApprovals' : IDL.Func([], [IDL.Vec(UserApprovalInfo)], ['query']),
-    'listBookings' : IDL.Func([BookingFilter], [IDL.Vec(Booking)], ['query']),
+    'listBookings' : IDL.Func(
+        [BookingFilter, IDL.Nat, IDL.Nat],
+        [PagedBookings],
+        ['query'],
+      ),
     'listPackagesByVendor' : IDL.Func(
         [VendorId],
         [IDL.Vec(StallPackage)],
         ['query'],
       ),
-    'listVendors' : IDL.Func([VendorFilter], [IDL.Vec(Vendor)], ['query']),
+    'listVendors' : IDL.Func(
+        [VendorFilter, IDL.Nat, IDL.Nat],
+        [PagedVendors],
+        ['query'],
+      ),
     'markUnavailableDate' : IDL.Func([VendorId, Timestamp], [], []),
     'processRefund' : IDL.Func([BookingId], [], []),
     'rejectVendor' : IDL.Func([VendorId], [], []),

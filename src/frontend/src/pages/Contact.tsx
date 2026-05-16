@@ -87,18 +87,22 @@ export default function ContactPage() {
   return (
     <RootLayout>
       {/* Hero */}
-      <section className="bg-card border-b border-border/60">
-        <div className="container py-16 max-w-4xl text-center">
+      <section className="bg-card border-b border-border/60 relative overflow-hidden">
+        {/* Gold glow decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/3 w-72 h-72 rounded-full bg-primary/5 blur-3xl" />
+        </div>
+        <div className="container py-16 max-w-4xl text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-block bg-primary/10 text-primary text-xs font-semibold tracking-wider uppercase px-3 py-1 rounded-full mb-4">
+            <span className="inline-block bg-primary/10 text-primary text-xs font-semibold tracking-wider uppercase px-3 py-1 rounded-full mb-4 border border-primary/20">
               Support & Inquiries
             </span>
             <h1 className="font-display font-bold text-5xl md:text-6xl mb-4">
-              Get in <span className="text-primary">Touch</span>
+              Get in <span className="gold-gradient">Touch</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               Have a question about a booking, a vendor, or our platform? Our
@@ -119,7 +123,7 @@ export default function ContactPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="lg:col-span-3"
             >
-              <Card className="border-border/60 shadow-sm">
+              <Card className="glass-card shadow-gold">
                 <CardContent className="p-8">
                   <h2 className="font-display font-semibold text-2xl mb-1">
                     Send Us a Message
@@ -134,10 +138,13 @@ export default function ContactPage() {
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
-                        <Label htmlFor="c-name">Full Name</Label>
+                        <Label htmlFor="c-name" className="text-foreground/80">
+                          Full Name
+                        </Label>
                         <Input
                           id="c-name"
                           placeholder="Rahul Sharma"
+                          className="bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                           {...register("name", {
                             required: "Name is required",
                           })}
@@ -153,11 +160,14 @@ export default function ContactPage() {
                         )}
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="c-email">Email Address</Label>
+                        <Label htmlFor="c-email" className="text-foreground/80">
+                          Email Address
+                        </Label>
                         <Input
                           id="c-email"
                           type="email"
                           placeholder="rahul@example.com"
+                          className="bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                           {...register("email", {
                             required: "Email is required",
                             pattern: {
@@ -179,10 +189,12 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label htmlFor="c-subject">Subject</Label>
+                      <Label htmlFor="c-subject" className="text-foreground/80">
+                        Subject
+                      </Label>
                       <select
                         id="c-subject"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        className="flex h-10 w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/60 transition-colors"
                         {...register("subject", {
                           required: "Please select a subject",
                         })}
@@ -206,12 +218,14 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label htmlFor="c-message">Message</Label>
+                      <Label htmlFor="c-message" className="text-foreground/80">
+                        Message
+                      </Label>
                       <Textarea
                         id="c-message"
                         rows={6}
                         placeholder="Describe your query in detail…"
-                        className="resize-none"
+                        className="resize-none bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                         {...register("message", {
                           required: "Message is required",
                           minLength: {
@@ -234,13 +248,32 @@ export default function ContactPage() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full gap-2"
+                      className="w-full gap-2 bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
                       disabled={isSubmitting}
                       data-ocid="contact.submit_button"
                     >
                       <Send className="size-4" />
                       {isSubmitting ? "Sending…" : "Send Message"}
                     </Button>
+
+                    {/* WhatsApp CTA */}
+                    <a
+                      href="https://wa.me/919876543210"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full rounded-lg bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/20 transition-smooth py-2.5 text-sm font-medium"
+                      data-ocid="contact.whatsapp_button"
+                    >
+                      <svg
+                        className="size-4"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                      Chat on WhatsApp
+                    </a>
                   </form>
                 </CardContent>
               </Card>
@@ -261,13 +294,13 @@ export default function ContactPage() {
                   {CONTACT_INFO.map((item) => (
                     <div
                       key={item.label}
-                      className="flex items-start gap-4 p-4 rounded-xl border border-border/60 bg-card"
+                      className="flex items-start gap-4 p-4 rounded-xl glass-card hover-lift"
                     >
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
                         <item.icon className="size-4 text-primary" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-0.5">
+                        <p className="text-xs font-medium text-primary/70 uppercase tracking-wider mb-0.5">
                           {item.label}
                         </p>
                         {item.href ? (
@@ -287,8 +320,8 @@ export default function ContactPage() {
               </div>
 
               {/* Social Links */}
-              <div className="p-5 rounded-xl border border-border/60 bg-card">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              <div className="p-5 rounded-xl glass-card">
+                <p className="text-xs font-semibold text-primary/70 uppercase tracking-wider mb-4">
                   Follow Us
                 </p>
                 <div className="flex items-center gap-3">
@@ -299,7 +332,7 @@ export default function ContactPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.label}
-                      className="flex size-10 items-center justify-center rounded-lg border border-border/60 bg-background hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-smooth"
+                      className="flex size-10 items-center justify-center rounded-lg border border-primary/20 bg-background hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-smooth"
                       data-ocid="contact.social_link"
                     >
                       <s.icon className="size-4" />
@@ -309,9 +342,9 @@ export default function ContactPage() {
               </div>
 
               {/* Map placeholder */}
-              <div className="rounded-xl border border-border/60 bg-muted/30 overflow-hidden h-36 flex items-center justify-center">
+              <div className="rounded-xl border border-primary/20 bg-card/50 overflow-hidden h-36 flex items-center justify-center">
                 <div className="text-center">
-                  <MapPin className="size-6 text-muted-foreground mx-auto mb-1" />
+                  <MapPin className="size-6 text-primary mx-auto mb-1" />
                   <p className="text-xs text-muted-foreground">
                     Nawada, Bihar, India
                   </p>

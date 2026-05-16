@@ -21,6 +21,9 @@ import {
   ChefHat,
   ChevronRight,
   FileText,
+  ShieldCheck,
+  Star,
+  TrendingUp,
   UtensilsCrossed,
 } from "lucide-react";
 import { useState } from "react";
@@ -44,6 +47,12 @@ const STEPS = [
   { id: 1, label: "Business Info", icon: Building2 },
   { id: 2, label: "Stall Details", icon: UtensilsCrossed },
   { id: 3, label: "Agreement", icon: FileText },
+];
+
+const TRUST_SIGNALS = [
+  { icon: ShieldCheck, text: "Admin-verified before going live" },
+  { icon: TrendingUp, text: "Reach thousands of wedding clients" },
+  { icon: Star, text: "Build your reputation with reviews" },
 ];
 
 type Step1Values = {
@@ -148,26 +157,28 @@ export default function VendorRegisterPage() {
     return (
       <RootLayout>
         <div className="container py-20 max-w-lg text-center">
-          <div className="flex size-20 items-center justify-center rounded-full bg-secondary/20 mx-auto mb-6">
-            <CheckCircle2 className="size-10 text-secondary" />
+          <div className="flex size-24 items-center justify-center rounded-full bg-primary/15 border border-primary/30 mx-auto mb-6 shadow-gold">
+            <CheckCircle2 className="size-12 text-primary" />
           </div>
-          <h1 className="font-display font-bold text-3xl mb-3">
+          <h1 className="font-display font-bold text-3xl mb-3 gold-gradient">
             Application Submitted!
           </h1>
           <p className="text-muted-foreground mb-6">
             Your vendor application has been received. Our team will review your
             details and get back to you within 1–3 business days.
           </p>
-          <div className="rounded-xl border border-border/60 bg-card p-5 text-left space-y-3 mb-8">
-            <p className="font-semibold text-sm">What happens next?</p>
+          <div className="glass-card rounded-xl p-5 text-left space-y-3 mb-8">
+            <p className="font-semibold text-sm text-primary">
+              What happens next?
+            </p>
             {[
               "📧 You'll receive a confirmation email shortly",
               "🔍 Admin team reviews your application (1–3 days)",
               "✅ Once approved, your stall goes live on Stallo.in",
               "💰 Start receiving bookings from wedding clients",
-            ].map((step) => (
-              <p key={step} className="text-sm text-muted-foreground">
-                {step}
+            ].map((s) => (
+              <p key={s} className="text-sm text-muted-foreground">
+                {s}
               </p>
             ))}
           </div>
@@ -184,477 +195,577 @@ export default function VendorRegisterPage() {
 
   return (
     <RootLayout>
-      <div className="container py-12 max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg mx-auto mb-4">
-            <ChefHat className="size-7" />
+      {/* Hero */}
+      <section className="bg-card border-b border-border/40">
+        <div className="container py-14 max-w-2xl text-center">
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-primary/15 border border-primary/30 shadow-gold mx-auto mb-5">
+            <ChefHat className="size-8 text-primary" />
           </div>
-          <h1 className="font-display font-bold text-3xl">
-            Register as a Vendor
+          <h1 className="font-display font-bold text-4xl md:text-5xl mb-3 gold-gradient">
+            Become a Stallo Vendor
           </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
+          <p className="text-muted-foreground text-lg">
             Join Stallo.in and reach thousands of wedding clients. Admin
             verification required.
           </p>
-        </div>
-
-        {/* Progress bar */}
-        <div className="flex items-center gap-0 mb-8">
-          {STEPS.map((s, i) => (
-            <div key={s.id} className="flex items-center flex-1">
+          {/* Trust signals */}
+          <div className="flex flex-wrap justify-center gap-5 mt-6">
+            {TRUST_SIGNALS.map((t) => (
               <div
-                className={cn(
-                  "flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
-                  step === s.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : step > s.id
-                      ? "bg-secondary/20 text-secondary"
-                      : "bg-muted text-muted-foreground",
-                )}
-                data-ocid={`vendor_register.step.${s.id}`}
+                key={t.text}
+                className="flex items-center gap-2 text-sm text-muted-foreground"
               >
-                {step > s.id ? (
-                  <CheckCircle2 className="size-3.5" />
-                ) : (
-                  <s.icon className="size-3.5" />
-                )}
-                <span className="hidden sm:inline">{s.label}</span>
+                <t.icon className="size-4 text-primary shrink-0" />
+                <span>{t.text}</span>
               </div>
-              {i < STEPS.length - 1 && (
-                <div className="flex-1 h-px bg-border mx-1" />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      </section>
 
-        <Card className="border-border/60 shadow-sm">
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {/* ─── Step 1: Business Info ─── */}
-              {step === 1 && (
-                <div className="space-y-5">
-                  <div>
-                    <h2 className="font-display font-semibold text-xl">
-                      Business Information
-                    </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Tell us about your stall business
-                    </p>
-                  </div>
-                  <Separator />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="businessName">Business Name *</Label>
-                      <Input
-                        id="businessName"
-                        className="mt-1"
-                        placeholder="e.g. Sharma Chaat Corner"
-                        {...register("businessName", { required: "Required" })}
-                        data-ocid="vendor_register.business_name.input"
-                      />
-                      {errors.businessName && (
-                        <p
-                          className="text-xs text-destructive mt-1"
-                          data-ocid="vendor_register.business_name.field_error"
-                        >
-                          {errors.businessName.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <Label htmlFor="ownerName">Owner Name *</Label>
-                      <Input
-                        id="ownerName"
-                        className="mt-1"
-                        placeholder="Full name"
-                        {...register("ownerName", { required: "Required" })}
-                        data-ocid="vendor_register.owner_name.input"
-                      />
-                      {errors.ownerName && (
-                        <p
-                          className="text-xs text-destructive mt-1"
-                          data-ocid="vendor_register.owner_name.field_error"
-                        >
-                          {errors.ownerName.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        className="mt-1"
-                        placeholder="you@example.com"
-                        {...register("email", { required: "Required" })}
-                        data-ocid="vendor_register.email.input"
-                      />
-                      {errors.email && (
-                        <p
-                          className="text-xs text-destructive mt-1"
-                          data-ocid="vendor_register.email.field_error"
-                        >
-                          {errors.email.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <Label htmlFor="phone">Phone *</Label>
-                      <Input
-                        id="phone"
-                        className="mt-1"
-                        placeholder="+91 9876543210"
-                        {...register("phone", { required: "Required" })}
-                        data-ocid="vendor_register.phone.input"
-                      />
-                      {errors.phone && (
-                        <p
-                          className="text-xs text-destructive mt-1"
-                          data-ocid="vendor_register.phone.field_error"
-                        >
-                          {errors.phone.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label>Stall Category *</Label>
-                    <Select value={category} onValueChange={setCategory}>
-                      <SelectTrigger
-                        className="mt-1"
-                        data-ocid="vendor_register.category.select"
-                      >
-                        <SelectValue placeholder="Select stall category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CATEGORIES.map((c) => (
-                          <SelectItem key={c} value={c}>
-                            {c}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="serviceArea">Service Area *</Label>
-                    <Input
-                      id="serviceArea"
-                      className="mt-1"
-                      placeholder="e.g. Nawada, Bihar"
-                      {...register("serviceArea", { required: "Required" })}
-                      data-ocid="vendor_register.service_area.input"
-                    />
-                    {errors.serviceArea && (
-                      <p
-                        className="text-xs text-destructive mt-1"
-                        data-ocid="vendor_register.service_area.field_error"
-                      >
-                        {errors.serviceArea.message}
-                      </p>
-                    )}
-                  </div>
+      <div className="bg-background">
+        <div className="container py-12 max-w-2xl">
+          {/* Step indicator */}
+          <div className="flex items-center gap-0 mb-8">
+            {STEPS.map((s, i) => (
+              <div key={s.id} className="flex items-center flex-1">
+                <div
+                  className={cn(
+                    "flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                    step === s.id
+                      ? "bg-primary text-primary-foreground shadow-gold"
+                      : step > s.id
+                        ? "bg-primary/20 text-primary border border-primary/30"
+                        : "bg-card text-muted-foreground border border-border/50",
+                  )}
+                  data-ocid={`vendor_register.step.${s.id}`}
+                >
+                  {step > s.id ? (
+                    <CheckCircle2 className="size-3.5 text-primary" />
+                  ) : (
+                    <s.icon className="size-3.5" />
+                  )}
+                  <span className="hidden sm:inline">{s.label}</span>
                 </div>
-              )}
-
-              {/* ─── Step 2: Stall Details ─── */}
-              {step === 2 && (
-                <div className="space-y-5">
-                  <div>
-                    <h2 className="font-display font-semibold text-xl">
-                      Stall Details
-                    </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Describe your stall and initial package
-                    </p>
-                  </div>
-                  <Separator />
-
-                  <div>
-                    <Label htmlFor="description">Stall Description *</Label>
-                    <Textarea
-                      id="description"
-                      placeholder="Describe your stall, specialties, years of experience, and what makes you special..."
-                      rows={4}
-                      className="mt-1 resize-none"
-                      {...register("description", { required: "Required" })}
-                      data-ocid="vendor_register.description.textarea"
-                    />
-                    {errors.description && (
-                      <p
-                        className="text-xs text-destructive mt-1"
-                        data-ocid="vendor_register.description.field_error"
-                      >
-                        {errors.description.message}
-                      </p>
+                {i < STEPS.length - 1 && (
+                  <div
+                    className={cn(
+                      "flex-1 h-px mx-1",
+                      step > s.id ? "bg-primary/50" : "bg-border/40",
                     )}
-                  </div>
+                  />
+                )}
+              </div>
+            ))}
+          </div>
 
-                  <div className="rounded-lg border border-border/60 bg-muted/30 p-4 space-y-4">
-                    <p className="font-semibold text-sm">Initial Package</p>
+          <Card className="glass-card shadow-gold">
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {/* ─── Step 1: Business Info ─── */}
+                {step === 1 && (
+                  <div className="space-y-5">
+                    <div>
+                      <h2 className="font-display font-semibold text-xl gold-gradient">
+                        Business Information
+                      </h2>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Tell us about your stall business
+                      </p>
+                    </div>
+                    <Separator className="bg-border/40" />
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="packageName">Package Name *</Label>
+                        <Label
+                          htmlFor="businessName"
+                          className="text-foreground/80"
+                        >
+                          Business Name *
+                        </Label>
                         <Input
-                          id="packageName"
-                          className="mt-1"
-                          placeholder="e.g. Standard Wedding Package"
-                          {...register("packageName", { required: "Required" })}
-                          data-ocid="vendor_register.package_name.input"
+                          id="businessName"
+                          className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          placeholder="e.g. Sharma Chaat Corner"
+                          {...register("businessName", {
+                            required: "Required",
+                          })}
+                          data-ocid="vendor_register.business_name.input"
                         />
-                        {errors.packageName && (
-                          <p className="text-xs text-destructive mt-1">
-                            {errors.packageName.message}
+                        {errors.businessName && (
+                          <p
+                            className="text-xs text-destructive mt-1"
+                            data-ocid="vendor_register.business_name.field_error"
+                          >
+                            {errors.businessName.message}
                           </p>
                         )}
                       </div>
                       <div>
-                        <Label htmlFor="packagePrice">Price (₹) *</Label>
+                        <Label
+                          htmlFor="ownerName"
+                          className="text-foreground/80"
+                        >
+                          Owner Name *
+                        </Label>
                         <Input
-                          id="packagePrice"
-                          type="number"
-                          className="mt-1"
-                          placeholder="e.g. 15000"
-                          {...register("packagePrice", {
-                            required: "Required",
-                            min: { value: 1, message: "Must be > 0" },
-                          })}
-                          data-ocid="vendor_register.package_price.input"
+                          id="ownerName"
+                          className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          placeholder="Full name"
+                          {...register("ownerName", { required: "Required" })}
+                          data-ocid="vendor_register.owner_name.input"
                         />
-                        {errors.packagePrice && (
-                          <p className="text-xs text-destructive mt-1">
-                            {errors.packagePrice.message}
+                        {errors.ownerName && (
+                          <p
+                            className="text-xs text-destructive mt-1"
+                            data-ocid="vendor_register.owner_name.field_error"
+                          >
+                            {errors.ownerName.message}
                           </p>
                         )}
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="guestMin">Min Guests *</Label>
+                        <Label htmlFor="email" className="text-foreground/80">
+                          Email *
+                        </Label>
                         <Input
-                          id="guestMin"
-                          type="number"
-                          className="mt-1"
-                          placeholder="50"
-                          {...register("guestMin", {
-                            required: "Required",
-                            min: { value: 1, message: "Min 1" },
-                          })}
-                          data-ocid="vendor_register.guest_min.input"
+                          id="email"
+                          type="email"
+                          className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          placeholder="you@example.com"
+                          {...register("email", { required: "Required" })}
+                          data-ocid="vendor_register.email.input"
                         />
+                        {errors.email && (
+                          <p
+                            className="text-xs text-destructive mt-1"
+                            data-ocid="vendor_register.email.field_error"
+                          >
+                            {errors.email.message}
+                          </p>
+                        )}
                       </div>
                       <div>
-                        <Label htmlFor="guestMax">Max Guests *</Label>
+                        <Label htmlFor="phone" className="text-foreground/80">
+                          Phone *
+                        </Label>
                         <Input
-                          id="guestMax"
-                          type="number"
-                          className="mt-1"
-                          placeholder="500"
-                          {...register("guestMax", {
-                            required: "Required",
-                            min: { value: 1, message: "Min 1" },
-                          })}
-                          data-ocid="vendor_register.guest_max.input"
+                          id="phone"
+                          className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          placeholder="+91 9876543210"
+                          {...register("phone", { required: "Required" })}
+                          data-ocid="vendor_register.phone.input"
                         />
+                        {errors.phone && (
+                          <p
+                            className="text-xs text-destructive mt-1"
+                            data-ocid="vendor_register.phone.field_error"
+                          >
+                            {errors.phone.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
                     <div>
-                      <Label htmlFor="inclusions">Package Inclusions</Label>
-                      <Textarea
-                        id="inclusions"
-                        placeholder="List what's included, one per line (e.g. Live chaat counter, Staff included, Setup & cleanup)"
-                        rows={3}
-                        className="mt-1 resize-none"
-                        {...register("inclusions")}
-                        data-ocid="vendor_register.inclusions.textarea"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="rounded-lg border border-border/60 bg-muted/20 p-4">
-                    <p className="text-sm font-semibold mb-1">📷 Photos</p>
-                    <p className="text-xs text-muted-foreground">
-                      You can upload stall photos after your account is
-                      approved. High-quality photos significantly improve
-                      booking rates.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* ─── Step 3: Agreement ─── */}
-              {step === 3 && (
-                <div className="space-y-5">
-                  <div>
-                    <h2 className="font-display font-semibold text-xl">
-                      Banking & Agreement
-                    </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      For payments and platform agreement
-                    </p>
-                  </div>
-                  <Separator />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="holderName">Account Holder Name *</Label>
-                      <Input
-                        id="holderName"
-                        className="mt-1"
-                        placeholder="Name as on bank account"
-                        {...register("holderName", { required: "Required" })}
-                        data-ocid="vendor_register.holder_name.input"
-                      />
-                      {errors.holderName && (
-                        <p className="text-xs text-destructive mt-1">
-                          {errors.holderName.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <Label htmlFor="ifscCode">IFSC Code *</Label>
-                      <Input
-                        id="ifscCode"
-                        className="mt-1 uppercase"
-                        placeholder="e.g. SBIN0001234"
-                        {...register("ifscCode", { required: "Required" })}
-                        data-ocid="vendor_register.ifsc_code.input"
-                      />
-                      {errors.ifscCode && (
-                        <p className="text-xs text-destructive mt-1">
-                          {errors.ifscCode.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="accountNumber">Account Number *</Label>
-                    <Input
-                      id="accountNumber"
-                      type="password"
-                      className="mt-1"
-                      placeholder="Bank account number"
-                      {...register("accountNumber", { required: "Required" })}
-                      data-ocid="vendor_register.account_number.input"
-                    />
-                    {errors.accountNumber && (
-                      <p className="text-xs text-destructive mt-1">
-                        {errors.accountNumber.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Label htmlFor="gstNumber">GST Number (optional)</Label>
-                    <Input
-                      id="gstNumber"
-                      className="mt-1 uppercase"
-                      placeholder="e.g. 22AAAAA0000A1Z5"
-                      {...register("gstNumber")}
-                      data-ocid="vendor_register.gst_number.input"
-                    />
-                  </div>
-
-                  <div className="rounded-xl border border-border/60 bg-muted/30 p-5">
-                    <p className="font-semibold text-sm mb-2">
-                      Platform Agreement
-                    </p>
-                    <div className="text-xs text-muted-foreground space-y-1.5 mb-4 max-h-32 overflow-y-auto">
-                      <p>
-                        By registering as a vendor on Stallo.in, you agree to:
-                      </p>
-                      <p>
-                        • Provide accurate and truthful information about your
-                        services
-                      </p>
-                      <p>
-                        • Maintain availability and fulfill confirmed bookings
-                      </p>
-                      <p>• Follow the cancellation and refund policies</p>
-                      <p>
-                        • Allow Stallo.in to collect a commission on each
-                        successful booking
-                      </p>
-                      <p>
-                        • Maintain service quality and respond to customer
-                        feedback
-                      </p>
-                      <p>
-                        • Comply with all applicable local laws and food safety
-                        regulations
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Checkbox
-                        id="agreement"
-                        checked={agreed}
-                        onCheckedChange={(v) => setAgreed(v === true)}
-                        data-ocid="vendor_register.agreement.checkbox"
-                      />
-                      <Label
-                        htmlFor="agreement"
-                        className="text-sm cursor-pointer"
-                      >
-                        I agree to the Stallo.in vendor terms and platform
-                        agreement
+                      <Label className="text-foreground/80">
+                        Stall Category *
                       </Label>
+                      <Select value={category} onValueChange={setCategory}>
+                        <SelectTrigger
+                          className="mt-1 bg-background border-border/60 focus:ring-primary/50"
+                          data-ocid="vendor_register.category.select"
+                        >
+                          <SelectValue placeholder="Select stall category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-card border-border/60">
+                          {CATEGORIES.map((c) => (
+                            <SelectItem key={c} value={c}>
+                              {c}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="serviceArea"
+                        className="text-foreground/80"
+                      >
+                        Service Area *
+                      </Label>
+                      <Input
+                        id="serviceArea"
+                        className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                        placeholder="e.g. Nawada, Bihar"
+                        {...register("serviceArea", { required: "Required" })}
+                        data-ocid="vendor_register.service_area.input"
+                      />
+                      {errors.serviceArea && (
+                        <p
+                          className="text-xs text-destructive mt-1"
+                          data-ocid="vendor_register.service_area.field_error"
+                        >
+                          {errors.serviceArea.message}
+                        </p>
+                      )}
                     </div>
                   </div>
+                )}
 
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    size="lg"
-                    disabled={!agreed || createVendor.isPending}
-                    data-ocid="vendor_register.submit_button"
-                  >
-                    {createVendor.isPending
-                      ? "Submitting Application..."
-                      : "Submit for Approval"}
-                  </Button>
-                  <p className="text-xs text-muted-foreground text-center">
-                    Your profile will be reviewed by our team within 1–3
-                    business days.
-                  </p>
-                </div>
-              )}
+                {/* ─── Step 2: Stall Details ─── */}
+                {step === 2 && (
+                  <div className="space-y-5">
+                    <div>
+                      <h2 className="font-display font-semibold text-xl gold-gradient">
+                        Stall Details
+                      </h2>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Describe your stall and initial package
+                      </p>
+                    </div>
+                    <Separator className="bg-border/40" />
 
-              {/* Navigation (steps 1 & 2) */}
-              {step < 3 && (
-                <div className="flex justify-between mt-6 pt-4 border-t border-border">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      step > 1 && setStep((s) => (s - 1) as 1 | 2 | 3)
-                    }
-                    disabled={step === 1}
-                    data-ocid="vendor_register.prev_button"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    data-ocid="vendor_register.next_button"
-                  >
-                    Next <ChevronRight className="size-4 ml-1" />
-                  </Button>
-                </div>
-              )}
-            </form>
-          </CardContent>
-        </Card>
+                    <div>
+                      <Label
+                        htmlFor="description"
+                        className="text-foreground/80"
+                      >
+                        Stall Description *
+                      </Label>
+                      <Textarea
+                        id="description"
+                        placeholder="Describe your stall, specialties, years of experience, and what makes you special..."
+                        rows={4}
+                        className="mt-1 resize-none bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                        {...register("description", { required: "Required" })}
+                        data-ocid="vendor_register.description.textarea"
+                      />
+                      {errors.description && (
+                        <p
+                          className="text-xs text-destructive mt-1"
+                          data-ocid="vendor_register.description.field_error"
+                        >
+                          {errors.description.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="rounded-lg border border-primary/20 bg-card/50 p-4 space-y-4">
+                      <p className="font-semibold text-sm text-primary">
+                        ✦ Initial Package
+                      </p>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <Label
+                            htmlFor="packageName"
+                            className="text-foreground/80"
+                          >
+                            Package Name *
+                          </Label>
+                          <Input
+                            id="packageName"
+                            className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                            placeholder="e.g. Standard Wedding Package"
+                            {...register("packageName", {
+                              required: "Required",
+                            })}
+                            data-ocid="vendor_register.package_name.input"
+                          />
+                          {errors.packageName && (
+                            <p className="text-xs text-destructive mt-1">
+                              {errors.packageName.message}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label
+                            htmlFor="packagePrice"
+                            className="text-foreground/80"
+                          >
+                            Price (₹) *
+                          </Label>
+                          <Input
+                            id="packagePrice"
+                            type="number"
+                            className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                            placeholder="e.g. 15000"
+                            {...register("packagePrice", {
+                              required: "Required",
+                              min: { value: 1, message: "Must be > 0" },
+                            })}
+                            data-ocid="vendor_register.package_price.input"
+                          />
+                          {errors.packagePrice && (
+                            <p className="text-xs text-destructive mt-1">
+                              {errors.packagePrice.message}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label
+                            htmlFor="guestMin"
+                            className="text-foreground/80"
+                          >
+                            Min Guests *
+                          </Label>
+                          <Input
+                            id="guestMin"
+                            type="number"
+                            className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                            placeholder="50"
+                            {...register("guestMin", {
+                              required: "Required",
+                              min: { value: 1, message: "Min 1" },
+                            })}
+                            data-ocid="vendor_register.guest_min.input"
+                          />
+                        </div>
+                        <div>
+                          <Label
+                            htmlFor="guestMax"
+                            className="text-foreground/80"
+                          >
+                            Max Guests *
+                          </Label>
+                          <Input
+                            id="guestMax"
+                            type="number"
+                            className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                            placeholder="500"
+                            {...register("guestMax", {
+                              required: "Required",
+                              min: { value: 1, message: "Min 1" },
+                            })}
+                            data-ocid="vendor_register.guest_max.input"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label
+                          htmlFor="inclusions"
+                          className="text-foreground/80"
+                        >
+                          Package Inclusions
+                        </Label>
+                        <Textarea
+                          id="inclusions"
+                          placeholder="List what's included, one per line (e.g. Live chaat counter, Staff included, Setup & cleanup)"
+                          rows={3}
+                          className="mt-1 resize-none bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          {...register("inclusions")}
+                          data-ocid="vendor_register.inclusions.textarea"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Photo upload area */}
+                    <div className="rounded-lg border-2 border-dashed border-primary/30 bg-primary/5 p-6 text-center">
+                      <span className="text-3xl block mb-2">📷</span>
+                      <p className="text-sm font-medium text-primary">Photos</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        You can upload stall photos after your account is
+                        approved. High-quality photos significantly improve
+                        booking rates.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── Step 3: Agreement ─── */}
+                {step === 3 && (
+                  <div className="space-y-5">
+                    <div>
+                      <h2 className="font-display font-semibold text-xl gold-gradient">
+                        Banking & Agreement
+                      </h2>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        For payments and platform agreement
+                      </p>
+                    </div>
+                    <Separator className="bg-border/40" />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <Label
+                          htmlFor="holderName"
+                          className="text-foreground/80"
+                        >
+                          Account Holder Name *
+                        </Label>
+                        <Input
+                          id="holderName"
+                          className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          placeholder="Name as on bank account"
+                          {...register("holderName", { required: "Required" })}
+                          data-ocid="vendor_register.holder_name.input"
+                        />
+                        {errors.holderName && (
+                          <p className="text-xs text-destructive mt-1">
+                            {errors.holderName.message}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor="ifscCode"
+                          className="text-foreground/80"
+                        >
+                          IFSC Code *
+                        </Label>
+                        <Input
+                          id="ifscCode"
+                          className="mt-1 uppercase bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                          placeholder="e.g. SBIN0001234"
+                          {...register("ifscCode", { required: "Required" })}
+                          data-ocid="vendor_register.ifsc_code.input"
+                        />
+                        {errors.ifscCode && (
+                          <p className="text-xs text-destructive mt-1">
+                            {errors.ifscCode.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="accountNumber"
+                        className="text-foreground/80"
+                      >
+                        Account Number *
+                      </Label>
+                      <Input
+                        id="accountNumber"
+                        type="password"
+                        className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                        placeholder="Bank account number"
+                        {...register("accountNumber", { required: "Required" })}
+                        data-ocid="vendor_register.account_number.input"
+                      />
+                      {errors.accountNumber && (
+                        <p className="text-xs text-destructive mt-1">
+                          {errors.accountNumber.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="gstNumber" className="text-foreground/80">
+                        GST Number (optional)
+                      </Label>
+                      <Input
+                        id="gstNumber"
+                        className="mt-1 uppercase bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
+                        placeholder="e.g. 22AAAAA0000A1Z5"
+                        {...register("gstNumber")}
+                        data-ocid="vendor_register.gst_number.input"
+                      />
+                    </div>
+
+                    <div className="rounded-xl border border-primary/20 bg-card/50 p-5">
+                      <p className="font-semibold text-sm text-primary mb-2">
+                        Platform Agreement
+                      </p>
+                      <div className="text-xs text-muted-foreground space-y-1.5 mb-4 max-h-32 overflow-y-auto">
+                        <p>
+                          By registering as a vendor on Stallo.in, you agree to:
+                        </p>
+                        <p>
+                          • Provide accurate and truthful information about your
+                          services
+                        </p>
+                        <p>
+                          • Maintain availability and fulfill confirmed bookings
+                        </p>
+                        <p>• Follow the cancellation and refund policies</p>
+                        <p>
+                          • Allow Stallo.in to collect a commission on each
+                          successful booking
+                        </p>
+                        <p>
+                          • Maintain service quality and respond to customer
+                          feedback
+                        </p>
+                        <p>
+                          • Comply with all applicable local laws and food
+                          safety regulations
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          id="agreement"
+                          checked={agreed}
+                          onCheckedChange={(v) => setAgreed(v === true)}
+                          data-ocid="vendor_register.agreement.checkbox"
+                          className="border-primary/40 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        />
+                        <Label
+                          htmlFor="agreement"
+                          className="text-sm cursor-pointer"
+                        >
+                          I agree to the Stallo.in vendor terms and platform
+                          agreement
+                        </Label>
+                      </div>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
+                      size="lg"
+                      disabled={!agreed || createVendor.isPending}
+                      data-ocid="vendor_register.submit_button"
+                    >
+                      {createVendor.isPending
+                        ? "Submitting Application..."
+                        : "Submit for Approval"}
+                    </Button>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Your profile will be reviewed by our team within 1–3
+                      business days.
+                    </p>
+                  </div>
+                )}
+
+                {/* Navigation (steps 1 & 2) */}
+                {step < 3 && (
+                  <div className="flex justify-between mt-6 pt-4 border-t border-border/40">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() =>
+                        step > 1 && setStep((s) => (s - 1) as 1 | 2 | 3)
+                      }
+                      disabled={step === 1}
+                      className="border-border/60 text-muted-foreground hover:border-primary/40 hover:text-primary"
+                      data-ocid="vendor_register.prev_button"
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={nextStep}
+                      className="bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
+                      data-ocid="vendor_register.next_button"
+                    >
+                      Next <ChevronRight className="size-4 ml-1" />
+                    </Button>
+                  </div>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </RootLayout>
   );

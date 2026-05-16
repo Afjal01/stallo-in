@@ -28,9 +28,15 @@ module {
     state : State,
     ownerId : CommonTypes.UserId,
     req : VendorTypes.CreateVendorRequest,
-  ) : VendorTypes.Vendor {
+  ) : { #ok : VendorTypes.Vendor; #err : Text } {
     if (ownerId.isAnonymous()) {
-      Runtime.trap("Unauthorized: Must be authenticated");
+      return #err("Unauthorized: Must be authenticated");
+    };
+    if (req.businessName == "") {
+      return #err("VALIDATION: businessName: Business name cannot be empty");
+    };
+    if (req.serviceArea == "") {
+      return #err("VALIDATION: serviceArea: At least one service area must be provided");
     };
     let id = state.counter.nextId.toText();
     state.counter.nextId += 1;
@@ -53,7 +59,7 @@ module {
       createdAt = Time.now();
     };
     state.vendors.add(id, vendor);
-    vendor;
+    #ok(vendor);
   };
 
   public func updateVendorProfile(
@@ -94,8 +100,11 @@ module {
   public func listVendors(
     state : State,
     filter : VendorTypes.VendorFilter,
-  ) : [VendorTypes.Vendor] {
-    state.vendors.values()
+    offset : Nat,
+    limit : Nat,
+  ) : VendorTypes.PagedVendors {
+    let effectiveLimit = if (limit == 0) { 20 } else { limit };
+    let all = state.vendors.values()
       .filter(func(v : VendorTypes.Vendor) : Bool {
         let matchCat = switch (filter.category) {
           case (?c) { v.category == c };
@@ -116,6 +125,9 @@ module {
         matchCat and matchArea and matchStatus and matchFeatured;
       })
       .toArray();
+    let total = all.size();
+    let items = all.sliceToArray(offset.toInt(), (offset + effectiveLimit).toInt());
+    { items; total; offset; limit = effectiveLimit };
   };
 
   public func approveVendor(

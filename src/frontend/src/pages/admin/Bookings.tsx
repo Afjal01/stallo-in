@@ -80,7 +80,9 @@ function BookingDetailModal({
         data-ocid="admin.booking_detail.dialog"
       >
         <DialogHeader>
-          <DialogTitle className="font-display">Booking Details</DialogTitle>
+          <DialogTitle className="font-display text-primary">
+            Booking Details
+          </DialogTitle>
           <DialogDescription className="font-mono text-xs">
             {booking.id}
           </DialogDescription>
@@ -306,7 +308,7 @@ export default function AdminBookings() {
           </Badge>
         </div>
 
-        <div className="rounded-lg border border-border bg-card overflow-hidden">
+        <div className="rounded-lg border border-border bg-card overflow-hidden glass-card">
           {isLoading ? (
             <div className="p-4 space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
@@ -325,7 +327,7 @@ export default function AdminBookings() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+                    <th className="px-4 py-3 text-left text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px]">
                       ID
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground hidden sm:table-cell">
@@ -340,16 +342,16 @@ export default function AdminBookings() {
                     <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground hidden lg:table-cell">
                       Guests
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground">
+                    <th className="px-4 py-3 text-right text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px]">
                       Amount
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+                    <th className="px-4 py-3 text-left text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px]">
                       Status
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground hidden lg:table-cell">
                       Payment
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+                    <th className="px-4 py-3 text-left text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px]">
                       Actions
                     </th>
                   </tr>
@@ -358,7 +360,7 @@ export default function AdminBookings() {
                   {sorted.map((b, i) => (
                     <tr
                       key={b.id}
-                      className="hover:bg-muted/30 transition-colors"
+                      className="hover:bg-muted/30 transition-colors odd:bg-muted/5"
                       data-ocid={`admin.bookings.item.${i + 1}`}
                     >
                       <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
@@ -376,7 +378,7 @@ export default function AdminBookings() {
                       <td className="px-4 py-3 text-right text-muted-foreground hidden lg:table-cell">
                         {Number(b.guestCount)}
                       </td>
-                      <td className="px-4 py-3 text-right font-semibold">
+                      <td className="px-4 py-3 text-right font-semibold text-primary">
                         {formatPrice(b.totalPrice)}
                       </td>
                       <td className="px-4 py-3">

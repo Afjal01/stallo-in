@@ -13,7 +13,9 @@ import PaymentApiMixin "mixins/payment-api";
 import NotificationApiMixin "mixins/notification-api";
 import OutCall "mo:caffeineai-http-outcalls/outcall";
 import Runtime "mo:core/Runtime";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   // ── Authorization + object storage ──────────────────────────────────────
   let accessControlState = AccessControl.initState();

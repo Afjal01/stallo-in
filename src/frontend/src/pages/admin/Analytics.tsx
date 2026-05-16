@@ -55,7 +55,7 @@ function KpiCard({
   loading: boolean;
 }) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
@@ -65,7 +65,9 @@ function KpiCard({
             {loading ? (
               <Skeleton className="h-7 w-24 mt-1" />
             ) : (
-              <p className="text-2xl font-display font-bold">{value}</p>
+              <p className="text-2xl font-display font-bold text-primary">
+                {value}
+              </p>
             )}
           </div>
           <div className="rounded-lg p-2.5 bg-primary/10 text-primary">
@@ -186,7 +188,7 @@ export default function AdminAnalytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold">
+              <CardTitle className="text-sm font-semibold font-display">
                 Bookings Over Time
               </CardTitle>
             </CardHeader>
@@ -216,7 +218,7 @@ export default function AdminAnalytics() {
                     <Line
                       type="monotone"
                       dataKey="bookings"
-                      stroke="hsl(var(--primary))"
+                      stroke="#F59E0B"
                       strokeWidth={2}
                       dot={false}
                       name="Bookings"
@@ -229,7 +231,7 @@ export default function AdminAnalytics() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold">
+              <CardTitle className="text-sm font-semibold font-display">
                 Revenue Over Time (₹)
               </CardTitle>
             </CardHeader>
@@ -263,7 +265,7 @@ export default function AdminAnalytics() {
                     <Line
                       type="monotone"
                       dataKey="revenue"
-                      stroke="hsl(var(--secondary))"
+                      stroke="#F59E0B"
                       strokeWidth={2}
                       dot={false}
                       name="Revenue"
@@ -278,7 +280,7 @@ export default function AdminAnalytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold">
+              <CardTitle className="text-sm font-semibold font-display">
                 Vendors by Category
               </CardTitle>
             </CardHeader>
@@ -333,7 +335,7 @@ export default function AdminAnalytics() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold">
+              <CardTitle className="text-sm font-semibold font-display">
                 Top Vendors by Rating
               </CardTitle>
             </CardHeader>
@@ -346,16 +348,16 @@ export default function AdminAnalytics() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border bg-muted/40">
-                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground">
+                      <th className="px-4 py-2.5 text-left text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px]">
                         Vendor
                       </th>
-                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground hidden sm:table-cell">
+                      <th className="px-4 py-2.5 text-left text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px] hidden sm:table-cell">
                         Category
                       </th>
-                      <th className="px-4 py-2.5 text-right text-xs font-semibold text-muted-foreground">
+                      <th className="px-4 py-2.5 text-right text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px]">
                         Rating
                       </th>
-                      <th className="px-4 py-2.5 text-right text-xs font-semibold text-muted-foreground hidden md:table-cell">
+                      <th className="px-4 py-2.5 text-right text-xs font-bold text-primary/60 uppercase tracking-widest text-[11px] hidden md:table-cell">
                         Reviews
                       </th>
                     </tr>
@@ -364,7 +366,7 @@ export default function AdminAnalytics() {
                     {topVendors.map((v, i) => (
                       <tr
                         key={v.id}
-                        className="hover:bg-muted/30 transition-colors"
+                        className="hover:bg-muted/30 transition-colors odd:bg-muted/5"
                         data-ocid={`admin.analytics.top_vendor.item.${i + 1}`}
                       >
                         <td className="px-4 py-3">

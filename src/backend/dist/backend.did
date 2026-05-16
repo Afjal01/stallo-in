@@ -37,6 +37,13 @@ type VendorFilter =
    serviceArea: opt text;
    status: opt VendorStatus;
  };
+type VendorBookingStat = 
+ record {
+   bookingCount: nat;
+   revenue: nat;
+   vendorId: VendorId;
+   vendorName: text;
+ };
 type Vendor = 
  record {
    businessName: text;
@@ -150,6 +157,20 @@ type PaymentStatus =
    pending;
    refunded;
  };
+type PagedVendors = 
+ record {
+   items: vec Vendor;
+   limit: nat;
+   offset: nat;
+   total: nat;
+ };
+type PagedBookings = 
+ record {
+   items: vec Booking;
+   limit: nat;
+   offset: nat;
+   total: nat;
+ };
 type PackageId = text;
 type ExternalBlob = blob;
 type DateRangeResult = 
@@ -177,6 +198,13 @@ type CreateBookingRequest =
    notes: opt text;
    packageId: PackageId;
    vendorId: VendorId;
+ };
+type CategoryBreakdown = 
+ record {
+   bookingCount: nat;
+   categoryId: text;
+   categoryName: text;
+   revenue: nat;
  };
 type CancellationPolicy = 
  record {
@@ -209,6 +237,7 @@ type Booking =
    advanceAmount: nat;
    bookingStatus: BookingStatus;
    cancellationFeePercent: nat;
+   commissionAmount: nat;
    createdAt: Timestamp;
    customerId: UserId;
    eventDate: Timestamp;
@@ -222,6 +251,7 @@ type Booking =
    totalPrice: nat;
    updatedAt: Timestamp;
    vendorId: VendorId;
+   vendorPayout: nat;
  };
 type ApprovalStatus = 
  variant {
@@ -235,10 +265,12 @@ type AnalyticsSummary =
    cancelledBookings: nat;
    commissionRevenue: nat;
    completedBookings: nat;
+   topVendors: vec VendorBookingStat;
    totalBookings: nat;
    totalCustomers: nat;
    totalRevenue: nat;
    totalVendors: nat;
+   vendorPayouts: nat;
  };
 service : {
   _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
@@ -275,13 +307,14 @@ service : {
   deletePackage: (packageId: PackageId) -> ();
   getAnalyticsSummary: () -> (AnalyticsSummary) query;
   getBooking: (bookingId: BookingId) -> (opt Booking) query;
-  getBookingsByDateRange: (from: Timestamp, to: Timestamp) ->
-   (vec DateRangeResult) query;
+  getBookingsByDateRange: (from: Timestamp, to: Timestamp, groupBy:
+   opt text) -> (vec DateRangeResult) query;
   getCallerUserRole: () -> (UserRole) query;
+  getCategoryBreakdown: () -> (vec CategoryBreakdown) query;
   getPackage: (packageId: PackageId) -> (opt StallPackage) query;
   getPlatformConfig: () -> (PlatformConfig) query;
-  getRevenueByDateRange: (from: Timestamp, to: Timestamp) ->
-   (vec DateRangeResult) query;
+  getRevenueByDateRange: (from: Timestamp, to: Timestamp, groupBy:
+   opt text) -> (vec DateRangeResult) query;
   getReviewsByVendor: (vendorId: VendorId) -> (vec Review) query;
   getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
   getUnavailableDates: (vendorId: VendorId) -> (vec Timestamp) query;
@@ -290,9 +323,11 @@ service : {
   isCallerApproved: () -> (bool) query;
   isStripeConfigured: () -> (bool) query;
   listApprovals: () -> (vec UserApprovalInfo) query;
-  listBookings: (filter: BookingFilter) -> (vec Booking) query;
+  listBookings: (filter: BookingFilter, offset: nat, limit: nat) ->
+   (PagedBookings) query;
   listPackagesByVendor: (vendorId: VendorId) -> (vec StallPackage) query;
-  listVendors: (filter: VendorFilter) -> (vec Vendor) query;
+  listVendors: (filter: VendorFilter, offset: nat, limit: nat) ->
+   (PagedVendors) query;
   markUnavailableDate: (vendorId: VendorId, date: Timestamp) -> ();
   processRefund: (bookingId: BookingId) -> ();
   rejectVendor: (vendorId: VendorId) -> ();

@@ -351,7 +351,7 @@ export default function AdminDashboard() {
                     {recentBookings.map((b, i) => (
                       <tr
                         key={b.id}
-                        className="hover:bg-muted/30 transition-colors"
+                        className="hover:bg-muted/30 odd:bg-muted/5 transition-colors"
                         data-ocid={`admin.recent_bookings.item.${i + 1}`}
                       >
                         <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
@@ -363,7 +363,7 @@ export default function AdminDashboard() {
                         <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
                           {formatDate(b.eventDate)}
                         </td>
-                        <td className="px-4 py-3 text-right font-medium">
+                        <td className="px-4 py-3 text-right font-medium text-emerald-400">
                           {formatPrice(b.totalPrice)}
                         </td>
                         <td className="px-4 py-3">

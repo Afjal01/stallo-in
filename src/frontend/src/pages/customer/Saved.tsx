@@ -97,11 +97,11 @@ export default function CustomerSavedPage() {
     >
       {savedIds.length === 0 ? (
         <div
-          className="rounded-xl border border-border/60 bg-card p-12 text-center"
+          className="glass-card rounded-xl border border-border/60 bg-card p-12 text-center"
           data-ocid="saved.empty_state"
         >
           <div className="flex size-14 items-center justify-center rounded-full bg-muted mx-auto mb-4">
-            <Heart className="size-7 text-muted-foreground" />
+            <Heart className="size-7 text-primary" />
           </div>
           <p className="font-display font-semibold text-xl mb-2">
             No saved stalls yet

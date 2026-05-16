@@ -30,6 +30,7 @@ import {
   CreditCard,
   Wallet,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
@@ -50,21 +51,26 @@ function StepProgress({ currentStep }: { currentStep: number }) {
             className={cn(
               "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors",
               currentStep === s.id
-                ? "bg-primary text-primary-foreground shadow-sm"
+                ? "bg-primary text-primary-foreground shadow-gold"
                 : currentStep > s.id
-                  ? "bg-secondary/20 text-secondary"
-                  : "bg-muted text-muted-foreground",
+                  ? "bg-primary/20 text-primary border border-primary/30"
+                  : "bg-card text-muted-foreground border border-border/50",
             )}
           >
             {currentStep > s.id ? (
-              <Check className="size-3" />
+              <Check className="size-3 text-primary" />
             ) : (
               <span>{s.id}</span>
             )}
             <span className="hidden sm:inline">{s.label}</span>
           </div>
           {i < STEPS.length - 1 && (
-            <div className="flex-1 h-px bg-border mx-1" />
+            <div
+              className={cn(
+                "flex-1 h-px mx-1 transition-colors",
+                currentStep > s.id ? "bg-primary/50" : "bg-border/40",
+              )}
+            />
           )}
         </div>
       ))}
@@ -153,18 +159,25 @@ export default function BookingPage() {
     return (
       <RootLayout>
         <div className="container py-20 max-w-lg text-center">
-          <div className="flex size-20 items-center justify-center rounded-full bg-secondary/20 mx-auto mb-6">
-            <Check className="size-10 text-secondary" />
-          </div>
-          <h1 className="font-display font-bold text-3xl mb-3">
+          <motion.div
+            className="flex size-24 items-center justify-center rounded-full bg-primary/15 border border-primary/30 mx-auto mb-6 shadow-gold"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Check className="size-12 text-primary" />
+          </motion.div>
+          <h1 className="font-display font-bold text-3xl mb-3 gold-gradient">
             Booking Confirmed! 🎉
           </h1>
           <p className="text-muted-foreground mb-6">
             Your payment was successful. The vendor will confirm your booking
             within 24 hours.
           </p>
-          <div className="rounded-xl border border-border/60 bg-card p-5 text-left space-y-2 mb-8 text-sm">
-            <p className="font-semibold text-base mb-3">What's next?</p>
+          <div className="glass-card rounded-xl p-5 text-left space-y-2 mb-8 text-sm">
+            <p className="font-semibold text-base mb-3 text-primary">
+              What's next?
+            </p>
             <p className="text-muted-foreground">
               📧 Booking confirmation sent to your email
             </p>
@@ -175,7 +188,12 @@ export default function BookingPage() {
               🎊 Enjoy your wedding celebration!
             </p>
           </div>
-          <Button asChild size="lg" data-ocid="booking.go_to_dashboard.button">
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary text-primary-foreground shadow-gold"
+            data-ocid="booking.go_to_dashboard.button"
+          >
             <Link to="/dashboard/bookings">View My Bookings</Link>
           </Button>
         </div>
@@ -186,7 +204,12 @@ export default function BookingPage() {
   return (
     <RootLayout>
       <div className="container py-8 max-w-3xl">
-        <Button variant="ghost" size="sm" asChild className="mb-4 -ml-1">
+        <Button
+          variant="ghost"
+          size="sm"
+          asChild
+          className="mb-4 -ml-1 text-muted-foreground hover:text-primary"
+        >
           <Link to="/stall/$vendorId" params={{ vendorId }}>
             <ArrowLeft className="size-4 mr-1" />
             Back to Stall
@@ -195,12 +218,12 @@ export default function BookingPage() {
 
         <StepProgress currentStep={store.step} />
 
-        <div className="rounded-xl border border-border/60 bg-card p-6 shadow-sm">
+        <div className="glass-card rounded-xl p-6 shadow-gold">
           {/* ─── Step 1: Package ─── */}
           {store.step === 1 && (
             <div>
               <div className="mb-5">
-                <h2 className="font-display font-semibold text-2xl">
+                <h2 className="font-display font-semibold text-2xl gold-gradient">
                   Choose a Package
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
@@ -212,7 +235,7 @@ export default function BookingPage() {
               {isLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[1, 2].map((i) => (
-                    <Skeleton key={i} className="h-48 rounded-xl" />
+                    <Skeleton key={i} className="h-48 rounded-xl bg-card/60" />
                   ))}
                 </div>
               ) : activePackages.length === 0 ? (
@@ -239,7 +262,7 @@ export default function BookingPage() {
           {store.step === 2 && (
             <div className="space-y-5">
               <div>
-                <h2 className="font-display font-semibold text-2xl">
+                <h2 className="font-display font-semibold text-2xl gold-gradient">
                   Date & Venue
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
@@ -247,7 +270,9 @@ export default function BookingPage() {
                 </p>
               </div>
               <div>
-                <Label htmlFor="event-date">Event Date *</Label>
+                <Label htmlFor="event-date" className="text-foreground/80">
+                  Event Date *
+                </Label>
                 <Input
                   id="event-date"
                   type="date"
@@ -262,30 +287,34 @@ export default function BookingPage() {
                     )
                   }
                   min={new Date().toISOString().slice(0, 10)}
-                  className="mt-1"
+                  className="mt-1 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                   data-ocid="booking.event_date.input"
                 />
               </div>
               <div>
-                <Label htmlFor="venue">Venue Address *</Label>
+                <Label htmlFor="venue" className="text-foreground/80">
+                  Venue Address *
+                </Label>
                 <Textarea
                   id="venue"
                   placeholder="Enter your wedding venue address..."
                   value={store.eventVenue}
                   onChange={(e) => store.setEventVenue(e.target.value)}
-                  className="mt-1 resize-none"
+                  className="mt-1 resize-none bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                   rows={3}
                   data-ocid="booking.venue.textarea"
                 />
               </div>
               <div>
-                <Label htmlFor="notes">Additional Notes (optional)</Label>
+                <Label htmlFor="notes" className="text-foreground/80">
+                  Additional Notes (optional)
+                </Label>
                 <Textarea
                   id="notes"
                   placeholder="Any special requests or instructions for the vendor..."
                   value={store.notes}
                   onChange={(e) => store.setNotes(e.target.value)}
-                  className="mt-1 resize-none"
+                  className="mt-1 resize-none bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                   rows={2}
                   data-ocid="booking.notes.textarea"
                 />
@@ -297,7 +326,7 @@ export default function BookingPage() {
           {store.step === 3 && (
             <div className="space-y-5">
               <div>
-                <h2 className="font-display font-semibold text-2xl">
+                <h2 className="font-display font-semibold text-2xl gold-gradient">
                   Guest Count
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
@@ -305,7 +334,9 @@ export default function BookingPage() {
                 </p>
               </div>
               <div>
-                <Label htmlFor="guest-count">Number of Guests *</Label>
+                <Label htmlFor="guest-count" className="text-foreground/80">
+                  Number of Guests *
+                </Label>
                 <Input
                   id="guest-count"
                   type="number"
@@ -325,12 +356,12 @@ export default function BookingPage() {
                       Number.parseInt(e.target.value, 10) || 0,
                     )
                   }
-                  className="mt-1 text-lg h-12"
+                  className="mt-1 text-lg h-12 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                   data-ocid="booking.guest_count.input"
                 />
               </div>
               {store.selectedPackage && (
-                <div className="rounded-lg bg-muted/40 p-3 text-sm">
+                <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-sm">
                   <p className="text-muted-foreground">
                     Package capacity: {Number(store.selectedPackage.guestMin)}–
                     {Number(store.selectedPackage.guestMax)} guests
@@ -350,7 +381,7 @@ export default function BookingPage() {
           {store.step === 4 && store.selectedPackage && (
             <div className="space-y-5">
               <div>
-                <h2 className="font-display font-semibold text-2xl">
+                <h2 className="font-display font-semibold text-2xl gold-gradient">
                   Review & Confirm
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
@@ -359,8 +390,8 @@ export default function BookingPage() {
               </div>
 
               {/* Booking summary */}
-              <div className="rounded-lg bg-muted/30 border border-border/60 p-4 space-y-3 text-sm">
-                <p className="font-semibold text-xs text-muted-foreground uppercase tracking-wide">
+              <div className="rounded-lg bg-card border border-border/60 p-4 space-y-3 text-sm">
+                <p className="font-semibold text-xs text-primary/80 uppercase tracking-wide">
                   Booking Summary
                 </p>
                 {[
@@ -385,8 +416,8 @@ export default function BookingPage() {
               </div>
 
               {/* Price breakdown */}
-              <div className="rounded-lg bg-card border border-border/60 p-4 space-y-2 text-sm">
-                <p className="font-semibold text-xs text-muted-foreground uppercase tracking-wide">
+              <div className="rounded-lg bg-card border border-primary/20 p-4 space-y-2 text-sm">
+                <p className="font-semibold text-xs text-primary/80 uppercase tracking-wide">
                   Price Breakdown
                 </p>
                 <div className="flex justify-between">
@@ -409,10 +440,10 @@ export default function BookingPage() {
                     </span>
                   </div>
                 )}
-                <Separator />
-                <div className="flex justify-between font-semibold text-base">
+                <Separator className="bg-border/40" />
+                <div className="flex justify-between font-bold text-lg">
                   <span>Total Amount</span>
-                  <span className="text-primary">
+                  <span className="font-display text-2xl gold-gradient">
                     {formatPrice(totalPrice)}
                   </span>
                 </div>
@@ -448,10 +479,10 @@ export default function BookingPage() {
                       type="button"
                       onClick={() => store.setPaymentMethod(method)}
                       className={cn(
-                        "flex items-center gap-3 rounded-lg border-2 p-4 text-left transition-colors",
+                        "flex items-center gap-3 rounded-lg border-2 p-4 text-left transition-smooth",
                         store.paymentMethod === method
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-border/80",
+                          ? "border-primary bg-primary/8 shadow-gold"
+                          : "border-border/50 hover:border-primary/40 hover:bg-primary/5",
                       )}
                       data-ocid={`booking.payment_method.${method}`}
                     >
@@ -475,7 +506,7 @@ export default function BookingPage() {
                 </div>
               </div>
 
-              {/* Cancellation policy warning */}
+              {/* Cancellation policy — tiered cards */}
               {store.eventDate &&
                 (() => {
                   const fee = calculateCancellationFee(
@@ -483,31 +514,51 @@ export default function BookingPage() {
                     totalPrice,
                   );
                   return (
-                    <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-900/10 dark:border-amber-800/30 p-4">
-                      <div className="flex items-start gap-2">
-                        <AlertTriangle className="size-4 text-amber-600 shrink-0 mt-0.5" />
-                        <div className="text-xs">
-                          <p className="font-semibold text-amber-800 dark:text-amber-300 mb-1">
-                            Cancellation Policy
+                    <div className="rounded-lg border border-primary/20 bg-card p-4">
+                      <div className="flex items-start gap-2 mb-3">
+                        <AlertTriangle className="size-4 text-primary shrink-0 mt-0.5" />
+                        <p className="font-semibold text-sm text-primary">
+                          Cancellation Policy
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-3">
+                        <div className="rounded-lg bg-secondary/10 border border-secondary/20 p-2.5 text-center">
+                          <p className="font-bold text-secondary">0%</p>
+                          <p className="text-muted-foreground mt-0.5">
+                            7+ days before
                           </p>
-                          <p className="text-amber-700 dark:text-amber-400">
-                            If you cancel within 7 days of the event, a fee of
-                            up to 50% applies.
+                        </div>
+                        <div className="rounded-lg bg-primary/10 border border-primary/20 p-2.5 text-center">
+                          <p className="font-bold text-primary">25%</p>
+                          <p className="text-muted-foreground mt-0.5">
+                            3–7 days
                           </p>
-                          <p className="text-amber-700 dark:text-amber-400 mt-1">
-                            Current: {fee.daysToEvent} day
-                            {fee.daysToEvent !== 1 ? "s" : ""} away —{" "}
-                            {fee.feePercent}% fee if cancelled today
+                        </div>
+                        <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-2.5 text-center">
+                          <p className="font-bold text-destructive">50%</p>
+                          <p className="text-muted-foreground mt-0.5">
+                            Within 72h
                           </p>
                         </div>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        Your event is{" "}
+                        <span className="text-primary font-semibold">
+                          {fee.daysToEvent} day
+                          {fee.daysToEvent !== 1 ? "s" : ""}
+                        </span>{" "}
+                        away — current cancellation fee:{" "}
+                        <span className="text-primary font-semibold">
+                          {fee.feePercent}%
+                        </span>
+                      </p>
                     </div>
                   );
                 })()}
 
-              <div className="rounded-lg bg-muted/30 p-3">
+              <div className="rounded-lg bg-muted/20 border border-border/30 p-3">
                 <p className="text-xs text-muted-foreground">
-                  You will be redirected to Stripe to complete the payment
+                  🔒 You will be redirected to Stripe to complete the payment
                   securely.
                 </p>
               </div>
@@ -518,10 +569,10 @@ export default function BookingPage() {
           {store.step === 5 && (
             <div className="space-y-6">
               <div className="text-center py-4">
-                <div className="flex size-16 items-center justify-center rounded-full bg-secondary/20 mx-auto mb-4">
-                  <CreditCard className="size-7 text-secondary" />
+                <div className="flex size-16 items-center justify-center rounded-full bg-primary/15 border border-primary/30 mx-auto mb-4 shadow-gold">
+                  <CreditCard className="size-7 text-primary" />
                 </div>
-                <h2 className="font-display font-semibold text-2xl">
+                <h2 className="font-display font-semibold text-2xl gold-gradient">
                   Complete Payment
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
@@ -530,10 +581,13 @@ export default function BookingPage() {
               </div>
 
               {store.selectedPackage && (
-                <div className="rounded-xl border border-border/60 bg-muted/30 p-5">
+                <div className="rounded-xl border border-primary/20 bg-card p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <Badge variant="secondary" className="mb-2 text-xs">
+                      <Badge
+                        variant="secondary"
+                        className="mb-2 text-xs bg-primary/10 text-primary border-primary/20"
+                      >
                         {store.selectedPackage.name}
                       </Badge>
                       <p className="font-display font-semibold text-lg">
@@ -553,7 +607,7 @@ export default function BookingPage() {
                           ? "Advance (30%)"
                           : "Full amount"}
                       </p>
-                      <p className="font-display font-bold text-2xl text-primary">
+                      <p className="font-display font-bold text-2xl gold-gradient">
                         {formatPrice(advanceAmount)}
                       </p>
                     </div>
@@ -566,7 +620,7 @@ export default function BookingPage() {
                   <Button
                     asChild
                     size="lg"
-                    className="w-full"
+                    className="w-full bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
                     data-ocid="booking.pay_button"
                   >
                     <a href={store.checkoutUrl}>
@@ -583,7 +637,7 @@ export default function BookingPage() {
                   className="text-center py-4"
                   data-ocid="booking.payment.loading_state"
                 >
-                  <Skeleton className="h-12 rounded-lg" />
+                  <Skeleton className="h-12 rounded-lg bg-card/60" />
                 </div>
               )}
 
@@ -592,7 +646,7 @@ export default function BookingPage() {
                   variant="link"
                   size="sm"
                   asChild
-                  className="text-muted-foreground"
+                  className="text-muted-foreground hover:text-primary"
                 >
                   <Link to="/dashboard/bookings">View my bookings instead</Link>
                 </Button>
@@ -602,13 +656,14 @@ export default function BookingPage() {
 
           {/* Navigation buttons (steps 1–4) */}
           {store.step < 5 && (
-            <div className="flex justify-between mt-6 pt-4 border-t border-border">
+            <div className="flex justify-between mt-6 pt-4 border-t border-border/40">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => (store.step > 1 ? store.prevStep() : undefined)}
                 disabled={store.step === 1}
                 asChild={store.step === 1}
+                className="border-border/60 text-muted-foreground hover:border-primary/40 hover:text-primary"
                 data-ocid="booking.prev_button"
               >
                 {store.step === 1 ? (
@@ -629,6 +684,7 @@ export default function BookingPage() {
                   type="button"
                   onClick={store.nextStep}
                   disabled={!canProceed()}
+                  className="bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
                   data-ocid="booking.next_button"
                 >
                   Next <ArrowRight className="size-4 ml-1" />
@@ -638,6 +694,7 @@ export default function BookingPage() {
                   type="button"
                   onClick={handleSubmitBooking}
                   disabled={createBooking.isPending || createCheckout.isPending}
+                  className="bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
                   data-ocid="booking.submit_button"
                 >
                   {createBooking.isPending || createCheckout.isPending

@@ -22,8 +22,10 @@ export interface TransformationOutput {
 }
 export interface AnalyticsSummary {
     commissionRevenue: bigint;
+    vendorPayouts: bigint;
     cancelledBookings: bigint;
     totalBookings: bigint;
+    topVendors: Array<VendorBookingStat>;
     completedBookings: bigint;
     totalRevenue: bigint;
     totalCustomers: bigint;
@@ -35,6 +37,12 @@ export interface VendorFilter {
     status?: VendorStatus;
     featured?: boolean;
     category?: string;
+}
+export interface PagedVendors {
+    total: bigint;
+    offset: bigint;
+    limit: bigint;
+    items: Array<Vendor>;
 }
 export interface PlatformConfig {
     advancePaymentPercent: bigint;
@@ -52,6 +60,18 @@ export interface DateRangeResult {
     revenue: bigint;
     date: Timestamp;
     count: bigint;
+}
+export interface VendorBookingStat {
+    revenue: bigint;
+    vendorId: VendorId;
+    vendorName: string;
+    bookingCount: bigint;
+}
+export interface CategoryBreakdown {
+    categoryId: string;
+    revenue: bigint;
+    categoryName: string;
+    bookingCount: bigint;
 }
 export interface TransformationInput {
     context: Uint8Array;
@@ -132,6 +152,8 @@ export interface Booking {
     advanceAmount: bigint;
     vendorId: VendorId;
     notes?: string;
+    vendorPayout: bigint;
+    commissionAmount: bigint;
     eventVenue: string;
     customerId: UserId;
     stripePaymentIntentId?: string;
@@ -190,6 +212,12 @@ export interface ShoppingItem {
     productDescription: string;
 }
 export type VendorId = string;
+export interface PagedBookings {
+    total: bigint;
+    offset: bigint;
+    limit: bigint;
+    items: Array<Booking>;
+}
 export enum ApprovalStatus {
     pending = "pending",
     approved = "approved",
@@ -243,11 +271,12 @@ export interface backendInterface {
     deletePackage(packageId: PackageId): Promise<void>;
     getAnalyticsSummary(): Promise<AnalyticsSummary>;
     getBooking(bookingId: BookingId): Promise<Booking | null>;
-    getBookingsByDateRange(from: Timestamp, to: Timestamp): Promise<Array<DateRangeResult>>;
+    getBookingsByDateRange(from: Timestamp, to: Timestamp, groupBy: string | null): Promise<Array<DateRangeResult>>;
     getCallerUserRole(): Promise<UserRole>;
+    getCategoryBreakdown(): Promise<Array<CategoryBreakdown>>;
     getPackage(packageId: PackageId): Promise<StallPackage | null>;
     getPlatformConfig(): Promise<PlatformConfig>;
-    getRevenueByDateRange(from: Timestamp, to: Timestamp): Promise<Array<DateRangeResult>>;
+    getRevenueByDateRange(from: Timestamp, to: Timestamp, groupBy: string | null): Promise<Array<DateRangeResult>>;
     getReviewsByVendor(vendorId: VendorId): Promise<Array<Review>>;
     getStripeSessionStatus(sessionId: string): Promise<StripeSessionStatus>;
     getUnavailableDates(vendorId: VendorId): Promise<Array<Timestamp>>;
@@ -256,9 +285,9 @@ export interface backendInterface {
     isCallerApproved(): Promise<boolean>;
     isStripeConfigured(): Promise<boolean>;
     listApprovals(): Promise<Array<UserApprovalInfo>>;
-    listBookings(filter: BookingFilter): Promise<Array<Booking>>;
+    listBookings(filter: BookingFilter, offset: bigint, limit: bigint): Promise<PagedBookings>;
     listPackagesByVendor(vendorId: VendorId): Promise<Array<StallPackage>>;
-    listVendors(filter: VendorFilter): Promise<Array<Vendor>>;
+    listVendors(filter: VendorFilter, offset: bigint, limit: bigint): Promise<PagedVendors>;
     markUnavailableDate(vendorId: VendorId, date: Timestamp): Promise<void>;
     processRefund(bookingId: BookingId): Promise<void>;
     rejectVendor(vendorId: VendorId): Promise<void>;

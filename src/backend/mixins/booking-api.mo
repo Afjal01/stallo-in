@@ -25,7 +25,13 @@ mixin (
       case (?p) { p };
       case null { Runtime.trap("Package not found") };
     };
-    BookingLib.createBooking(bookingState, vendorState, caller, req, pkg.price);
+    if (not pkg.isActive) {
+      Runtime.trap("Package is not active");
+    };
+    switch (BookingLib.createBooking(bookingState, vendorState, caller, req, pkg.price)) {
+      case (#ok(b)) { b };
+      case (#err(e)) { Runtime.trap(e) };
+    };
   };
 
   public shared ({ caller }) func updateBookingStatus(
@@ -35,7 +41,10 @@ mixin (
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Must be authenticated");
     };
-    BookingLib.updateBookingStatus(bookingState, accessControlState, vendorState, bookingId, caller, status);
+    switch (BookingLib.updateBookingStatus(bookingState, accessControlState, vendorState, bookingId, caller, status)) {
+      case (#ok(b)) { b };
+      case (#err(e)) { Runtime.trap(e) };
+    };
   };
 
   public shared ({ caller }) func cancelBooking(
@@ -44,7 +53,10 @@ mixin (
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Must be authenticated");
     };
-    BookingLib.cancelBooking(bookingState, accessControlState, vendorState, bookingId, caller);
+    switch (BookingLib.cancelBooking(bookingState, accessControlState, vendorState, bookingId, caller)) {
+      case (#ok(b)) { b };
+      case (#err(e)) { Runtime.trap(e) };
+    };
   };
 
   public query ({ caller }) func getBooking(
@@ -54,9 +66,11 @@ mixin (
   };
 
   public query ({ caller }) func listBookings(
-    filter : BookingTypes.BookingFilter
-  ) : async [BookingTypes.Booking] {
-    BookingLib.listBookings(bookingState, filter);
+    filter : BookingTypes.BookingFilter,
+    offset : Nat,
+    limit : Nat,
+  ) : async BookingTypes.PagedBookings {
+    BookingLib.listBookings(bookingState, filter, offset, limit);
   };
 
   public query func calculateCancellationFee(
@@ -107,20 +121,29 @@ mixin (
       Runtime.trap("Unauthorized: Only admins can view analytics");
     };
     let totalVendors = vendorState.vendors.size();
-    BookingLib.getAnalyticsSummary(bookingState, totalVendors, 0);
+    BookingLib.getAnalyticsSummary(bookingState, vendorState, totalVendors, 0);
   };
 
   public query func getBookingsByDateRange(
     from : CommonTypes.Timestamp,
     to : CommonTypes.Timestamp,
+    groupBy : ?Text,
   ) : async [BookingTypes.DateRangeResult] {
-    BookingLib.getBookingsByDateRange(bookingState, from, to);
+    BookingLib.getBookingsByDateRange(bookingState, from, to, groupBy);
   };
 
   public query func getRevenueByDateRange(
     from : CommonTypes.Timestamp,
     to : CommonTypes.Timestamp,
+    groupBy : ?Text,
   ) : async [BookingTypes.DateRangeResult] {
-    BookingLib.getRevenueByDateRange(bookingState, from, to);
+    BookingLib.getRevenueByDateRange(bookingState, from, to, groupBy);
+  };
+
+  public query ({ caller }) func getCategoryBreakdown() : async [BookingTypes.CategoryBreakdown] {
+    if (not AccessControl.hasPermission(accessControlState, caller, #admin)) {
+      Runtime.trap("Unauthorized: Only admins can view category breakdown");
+    };
+    BookingLib.getCategoryBreakdown(bookingState, vendorState);
   };
 };

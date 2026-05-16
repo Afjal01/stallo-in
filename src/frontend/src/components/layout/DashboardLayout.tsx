@@ -100,45 +100,54 @@ function SidebarContent({
     role === UserRole.admin
       ? "Admin"
       : role === UserRole.user
-        ? "Vendor / Customer"
-        : "Guest";
-  const roleBg =
+        ? "Vendor"
+        : "Customer";
+
+  const roleBadgeClasses =
     role === UserRole.admin
-      ? "bg-primary/10 text-primary"
-      : "bg-secondary/15 text-secondary";
+      ? "bg-primary/15 text-primary border border-primary/30"
+      : role === UserRole.user
+        ? "bg-secondary/15 text-secondary border border-secondary/30"
+        : "bg-muted text-muted-foreground border border-border/60";
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-background">
       {/* Logo */}
-      <div className="p-4 border-b border-sidebar-border">
-        <Link to="/" onClick={onNavClick} className="flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <ChefHat className="size-3.5" />
+      <div className="px-4 py-4 border-b border-border/50">
+        <Link
+          to="/"
+          onClick={onNavClick}
+          className="flex items-center gap-2 group"
+        >
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-transform duration-200 group-hover:scale-110">
+            <ChefHat className="size-4" />
           </div>
-          <span className="font-display font-bold text-base text-sidebar-foreground">
-            Stallo<span className="text-primary">.in</span>
+          <span className="font-display font-bold text-base">
+            <span className="gold-gradient">Stallo</span>
+            <span className="text-foreground/50">.in</span>
           </span>
         </Link>
       </div>
 
       {/* Role badge */}
-      <div className="px-4 py-3">
+      <div className="px-4 py-3 border-b border-border/30">
         <span
           className={cn(
-            "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-            roleBg,
+            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
+            roleBadgeClasses,
           )}
         >
-          {roleLabel}
+          <span className="inline-flex size-1.5 rounded-full bg-current opacity-80" />
+          {roleLabel} Panel
         </span>
       </div>
 
       {/* Nav groups */}
-      <ScrollArea className="flex-1 px-3">
-        <nav className="space-y-4 pb-4">
+      <ScrollArea className="flex-1 px-3 py-2">
+        <nav className="space-y-5 pb-4">
           {navGroups.map((group) => (
             <div key={group.label}>
-              <p className="px-2 mb-1 text-xs font-semibold text-sidebar-accent-foreground uppercase tracking-wider">
+              <p className="px-2 mb-1.5 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
                 {group.label}
               </p>
               <ul className="space-y-0.5">
@@ -147,10 +156,10 @@ function SidebarContent({
                     <Link
                       to={item.href}
                       onClick={onNavClick}
-                      className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+                      className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200"
                       activeProps={{
                         className:
-                          "bg-sidebar-accent text-sidebar-foreground font-semibold",
+                          "bg-primary/10 text-primary font-semibold border-l-4 border-primary pl-[6px] rounded-l-none",
                       }}
                       activeOptions={{
                         exact: item.href.split("/").length <= 2,
@@ -174,23 +183,23 @@ function SidebarContent({
       </ScrollArea>
 
       {/* User footer */}
-      <div className="border-t border-sidebar-border p-3">
-        <div className="flex items-center gap-2.5 rounded-md p-2 hover:bg-sidebar-accent transition-colors">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary text-xs font-bold">
+      <div className="border-t border-border/50 p-3">
+        <div className="flex items-center gap-2.5 rounded-md p-2 hover:bg-muted/50 transition-colors">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary text-xs font-bold border border-primary/20">
             {getInitials(shortPrincipal || "U")}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-sidebar-foreground truncate">
+            <p className="text-xs font-medium text-foreground truncate">
               {shortPrincipal || "User"}
             </p>
-            <p className="text-[10px] text-sidebar-accent-foreground truncate">
+            <p className="text-[10px] text-muted-foreground/70 truncate">
               Internet Identity
             </p>
           </div>
           <Button
             variant="ghost"
             size="icon"
-            className="size-7 shrink-0 text-sidebar-accent-foreground hover:text-destructive"
+            className="size-7 shrink-0 text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
             onClick={logout}
             aria-label="Logout"
             data-ocid="sidebar.logout.button"
@@ -229,13 +238,16 @@ export function DashboardLayout({
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col w-60 shrink-0 bg-sidebar border-r border-sidebar-border">
+      <aside className="hidden lg:flex lg:flex-col w-60 shrink-0 bg-background border-r border-border/50 shadow-[1px_0_0_0_oklch(var(--border)/0.5)]">
         <SidebarContent navGroups={navGroups} role={role} />
       </aside>
 
       {/* Mobile sidebar */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="w-60 p-0 bg-sidebar">
+        <SheetContent
+          side="left"
+          className="w-60 p-0 bg-background border-r border-border/50"
+        >
           <SidebarContent
             navGroups={navGroups}
             role={role}
@@ -247,11 +259,11 @@ export function DashboardLayout({
       {/* Main content */}
       <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-card px-4 lg:px-6">
+        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border/50 bg-card/80 backdrop-blur-sm px-4 lg:px-6">
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden text-muted-foreground hover:text-foreground"
             onClick={() => setMobileOpen(true)}
             aria-label="Open sidebar"
             data-ocid="dashboard.mobile_menu.button"
@@ -276,7 +288,7 @@ export function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 bg-background">
           <div className="p-4 lg:p-6">{children}</div>
         </ScrollArea>
       </div>

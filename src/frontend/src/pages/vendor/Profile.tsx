@@ -70,13 +70,13 @@ function VerificationStatus({ status }: { status: VendorStatus }) {
     [VendorStatus.pending]: {
       icon: ShieldAlert,
       label: "Pending Verification",
-      cls: "bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-700/30 dark:text-amber-400",
+      cls: "bg-primary/10 border-primary/30 text-primary",
       desc: "Your profile is under review. You'll be notified once approved.",
     },
     [VendorStatus.approved]: {
       icon: ShieldCheck,
       label: "Verified Vendor",
-      cls: "bg-secondary/10 border-secondary/30 text-secondary",
+      cls: "bg-primary/15 border-primary/40 text-primary",
       desc: "Your profile is verified and live. Customers can book your stall.",
     },
     [VendorStatus.rejected]: {
@@ -221,7 +221,7 @@ export default function VendorProfilePage() {
         )}
 
         {/* Stall photos */}
-        <Card className="border-border/60">
+        <Card className="border-border/60 glass-card">
           <CardHeader className="pb-3">
             <p className="font-display font-semibold text-base">Stall Photos</p>
             <p className="text-xs text-muted-foreground">
@@ -261,7 +261,7 @@ export default function VendorProfilePage() {
         </Card>
 
         {/* Profile form */}
-        <Card className="border-border/60">
+        <Card className="border-border/60 glass-card">
           <CardHeader className="pb-3">
             <p className="font-display font-semibold text-base">
               Business Information
@@ -391,7 +391,7 @@ export default function VendorProfilePage() {
                 type="submit"
                 disabled={!isDirty || updateProfile.isPending}
                 data-ocid="vendor_profile.save_button"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto shadow-gold"
               >
                 <Save className="size-4 mr-1.5" />
                 {updateProfile.isPending ? "Saving..." : "Save Changes"}
@@ -401,7 +401,7 @@ export default function VendorProfilePage() {
         </Card>
 
         {/* Bank details */}
-        <Card className="border-border/60">
+        <Card className="border-border/60 glass-card">
           <CardHeader className="pb-3">
             <p className="font-display font-semibold text-base">Bank Details</p>
             <p className="text-xs text-muted-foreground">

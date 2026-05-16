@@ -48,16 +48,17 @@ export function StarRating({
             className={cn(
               "transition-transform",
               interactive
-                ? "cursor-pointer hover:scale-110 disabled:cursor-default"
+                ? "cursor-pointer hover:scale-125 disabled:cursor-default"
                 : "cursor-default",
             )}
           >
             <Star
               className={cn(
                 sizeClass,
+                "drop-shadow-sm",
                 filled || partial
                   ? "fill-primary text-primary"
-                  : "fill-muted text-muted-foreground/40",
+                  : "fill-muted/40 text-muted-foreground/30",
               )}
             />
           </button>

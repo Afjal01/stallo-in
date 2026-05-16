@@ -77,7 +77,7 @@ export default function BrowsePage() {
     <RootLayout>
       {/* Page header */}
       <section className="bg-card border-b border-border/40">
-        <div className="container py-10">
+        <div className="container py-12">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -85,12 +85,12 @@ export default function BrowsePage() {
           >
             <Badge
               variant="outline"
-              className="mb-3 text-primary border-primary/30"
+              className="mb-3 text-primary border-primary/40 bg-primary/5"
             >
-              All Vendors
+              ✦ All Vendors
             </Badge>
-            <h1 className="font-display font-bold text-4xl md:text-5xl mb-2">
-              Browse Food Stalls
+            <h1 className="font-display font-bold text-4xl md:text-5xl mb-2 gold-gradient">
+              Browse Wedding Food Stalls
             </h1>
             <p className="text-muted-foreground text-lg">
               Find verified wedding food stall vendors near you
@@ -105,12 +105,12 @@ export default function BrowsePage() {
             transition={{ duration: 0.4, delay: 0.1 }}
           >
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-primary" />
               <Input
                 placeholder="Search vendors, stall names, locations..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-9 h-11"
+                className="pl-9 h-11 bg-background border-border/60 focus-visible:ring-primary/50 focus-visible:border-primary/60"
                 data-ocid="browse.search_input"
               />
             </div>
@@ -120,6 +120,7 @@ export default function BrowsePage() {
                 size="icon"
                 onClick={() => setQuery("")}
                 aria-label="Clear search"
+                className="hover:text-primary"
               >
                 <X className="size-4" />
               </Button>
@@ -130,6 +131,7 @@ export default function BrowsePage() {
               onClick={() => setShowFilters((p) => !p)}
               aria-label="Toggle filters"
               data-ocid="browse.filters.toggle"
+              className="border-border/60 hover:border-primary/40 hover:text-primary"
             >
               <SlidersHorizontal className="size-4" />
             </Button>
@@ -153,8 +155,8 @@ export default function BrowsePage() {
                 onClick={() => setCategory(cat)}
                 className={`rounded-full px-4 py-1.5 text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 ${
                   category === cat
-                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                    : "bg-card text-foreground border-border hover:border-primary/40 hover:bg-muted/50"
+                    ? "bg-primary text-primary-foreground border-primary shadow-gold"
+                    : "bg-card text-muted-foreground border-border/50 hover:border-primary/50 hover:text-primary hover:bg-primary/5"
                 }`}
                 data-ocid={`browse.category.${cat.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
               >
@@ -179,13 +181,13 @@ export default function BrowsePage() {
                     <span className="text-sm text-muted-foreground">Sort:</span>
                     <Select value={sortBy} onValueChange={setSortBy}>
                       <SelectTrigger
-                        className="w-44 h-9 text-sm"
+                        className="w-44 h-9 text-sm border-border/60 focus:ring-primary/50"
                         data-ocid="browse.sort.select"
                       >
                         <ChevronDown className="size-3 mr-1" />
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-card border-border/60">
                         <SelectItem value="rating">Top Rated</SelectItem>
                         <SelectItem value="price">
                           Price: Low to High
@@ -203,9 +205,9 @@ export default function BrowsePage() {
             <p className="text-sm text-muted-foreground">
               {isLoading
                 ? "Loading vendors..."
-                : `${filtered.length} vendor${filtered.length !== 1 ? "s" : ""} found${
-                    category !== "All" ? ` in ${category}` : ""
-                  }`}
+                : `${filtered.length} vendor${
+                    filtered.length !== 1 ? "s" : ""
+                  } found${category !== "All" ? ` in ${category}` : ""}`}
             </p>
             {(category !== "All" || query) && (
               <Button
@@ -215,6 +217,7 @@ export default function BrowsePage() {
                   setQuery("");
                   setCategory("All");
                 }}
+                className="text-muted-foreground hover:text-primary"
                 data-ocid="browse.clear_filters_button"
               >
                 <X className="size-3 mr-1" /> Clear filters
@@ -228,13 +231,13 @@ export default function BrowsePage() {
               {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
                 <Skeleton
                   key={`skeleton-browse-${n}`}
-                  className="h-80 rounded-xl"
+                  className="h-80 rounded-xl bg-card/60"
                 />
               ))}
             </div>
           ) : filtered.length === 0 ? (
             <motion.div
-              className="flex flex-col items-center gap-4 py-24"
+              className="flex flex-col items-center gap-4 py-24 glass-card rounded-2xl"
               data-ocid="browse.empty_state"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -255,6 +258,7 @@ export default function BrowsePage() {
                   setQuery("");
                   setCategory("All");
                 }}
+                className="border-primary/40 text-primary hover:bg-primary/10"
                 data-ocid="browse.empty_state.clear_button"
               >
                 Clear filters
@@ -265,6 +269,7 @@ export default function BrowsePage() {
               {filtered.map((vendor, i) => (
                 <motion.div
                   key={vendor.id}
+                  className="animate-rise-in hover-lift"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{

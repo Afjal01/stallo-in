@@ -73,12 +73,12 @@ export default function CustomerDashboardPage() {
       }
     >
       {/* Welcome banner */}
-      <div className="rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 mb-6 flex items-center gap-3">
+      <div className="glass-card rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 mb-6 flex items-center gap-3">
         <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15">
           <span className="text-base">👋</span>
         </div>
         <div className="min-w-0">
-          <p className="font-display font-semibold text-foreground">
+          <p className="font-display font-semibold gold-gradient">
             Welcome back!
           </p>
           <p className="text-xs text-muted-foreground font-mono truncate">
@@ -98,7 +98,7 @@ export default function CustomerDashboardPage() {
         {stats.map((stat, i) => (
           <Card
             key={stat.label}
-            className="border-border/60"
+            className="border-border/60 hover-lift"
             data-ocid={`dashboard.stat.${i + 1}`}
           >
             <CardContent className="p-5 flex items-center gap-4">
@@ -108,7 +108,7 @@ export default function CustomerDashboardPage() {
                 <stat.icon className="size-5" />
               </div>
               <div>
-                <p className="text-2xl font-display font-bold">
+                <p className="text-2xl font-display font-bold text-primary">
                   {isLoading ? <Skeleton className="h-7 w-10" /> : stat.value}
                 </p>
                 <p className="text-xs text-muted-foreground">{stat.label}</p>
@@ -120,7 +120,7 @@ export default function CustomerDashboardPage() {
 
       {/* Upcoming bookings */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-display font-semibold text-xl">
+        <h2 className="font-display font-semibold text-xl text-primary">
           Upcoming Bookings
         </h2>
         <Button
@@ -172,14 +172,14 @@ export default function CustomerDashboardPage() {
               key={b.id}
               to="/dashboard/bookings/$bookingId"
               params={{ bookingId: b.id }}
-              className="flex items-center justify-between rounded-xl border border-border/60 bg-card p-4 hover:shadow-sm hover:border-primary/30 transition-smooth group"
+              className="flex items-center justify-between rounded-xl border border-border/60 bg-card p-4 hover:shadow-sm hover:border-primary/30 transition-smooth group hover-lift"
               data-ocid={`dashboard.booking.item.${i + 1}`}
             >
               <div className="min-w-0">
                 <p className="font-medium text-sm truncate">
                   Booking #{b.id.slice(0, 8)}
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-primary mt-0.5">
                   <CalendarDays className="size-3 inline mr-1" />
                   {formatDate(b.eventDate)}
                 </p>

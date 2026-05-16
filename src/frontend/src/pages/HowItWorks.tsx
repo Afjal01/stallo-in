@@ -26,30 +26,35 @@ const STEPS = [
     title: "Browse & Compare Stalls",
     desc: "Explore verified food stall vendors across categories like chaat, golgappa, dosa, mocktails, and more. Filter by location, guest count, and price. Compare packages side by side to find your perfect match.",
     detail: "100+ verified vendors in Bihar",
+    number: "01",
   },
   {
     icon: Calendar,
     title: "Choose Your Date & Venue",
     desc: "Select your wedding or event date and enter your venue details. Real-time availability is checked against the vendor's confirmed schedule so you never face a last-minute conflict.",
     detail: "Live availability calendar",
+    number: "02",
   },
   {
     icon: CreditCard,
     title: "Pay Securely Online",
     desc: "Pay your advance securely via Stripe. We support partial advance payments. Your payment details are never stored on Stallo.in — everything flows through Stripe's encrypted vault.",
     detail: "Stripe-secured transactions",
+    number: "03",
   },
   {
     icon: CheckCircle2,
     title: "Vendor Confirms & Prepares",
     desc: "The vendor receives your booking instantly, reviews event details, and confirms within 24 hours. You get an email notification the moment they accept. They then begin stall preparation.",
     detail: "24-hour confirmation guarantee",
+    number: "04",
   },
   {
     icon: PartyPopper,
     title: "Enjoy Your Wedding!",
     desc: "Your vendor arrives on time, sets up the stall professionally, and serves your guests. After the event, leave a review to help future customers. Any dispute is handled by our support team.",
     detail: "Post-event review & support",
+    number: "05",
   },
 ];
 
@@ -115,10 +120,10 @@ const FAQS = [
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-border/60 rounded-xl overflow-hidden">
+    <div className="glass-card rounded-xl overflow-hidden">
       <button
         type="button"
-        className="w-full flex items-center justify-between gap-3 p-5 text-left font-semibold bg-card hover:bg-muted/30 transition-smooth"
+        className="w-full flex items-center justify-between gap-3 p-5 text-left font-semibold bg-transparent hover:bg-primary/5 transition-smooth"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         data-ocid="how-it-works.faq.toggle"
@@ -128,11 +133,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
           {q}
         </span>
         <ChevronDown
-          className={`size-4 text-muted-foreground shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`size-4 text-primary shrink-0 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
         />
       </button>
       {open && (
-        <div className="px-5 pb-5 pt-0 text-sm text-muted-foreground leading-relaxed bg-card border-t border-border/40">
+        <div className="px-5 pb-5 pt-0 text-sm text-muted-foreground leading-relaxed border-t border-border/30">
           <p className="pt-4">{a}</p>
         </div>
       )}
@@ -144,18 +151,22 @@ export default function HowItWorksPage() {
   return (
     <RootLayout>
       {/* Hero */}
-      <section className="bg-card border-b border-border/60">
-        <div className="container py-20 max-w-4xl text-center">
+      <section className="bg-card border-b border-border/60 relative overflow-hidden">
+        {/* Decorative glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-80 h-80 rounded-full bg-primary/5 blur-3xl" />
+        </div>
+        <div className="container py-20 max-w-4xl text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-block bg-primary/10 text-primary text-xs font-semibold tracking-wider uppercase px-3 py-1 rounded-full mb-4">
+            <span className="inline-block bg-primary/10 text-primary text-xs font-semibold tracking-wider uppercase px-3 py-1 rounded-full mb-4 border border-primary/20">
               Simple & Transparent
             </span>
             <h1 className="font-display font-bold text-5xl md:text-6xl mb-4 leading-tight">
-              How <span className="text-primary">Stallo</span> Works
+              How <span className="gold-gradient">Stallo</span> Works
             </h1>
             <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
               From browsing to your wedding day — book a premium food stall in 5
@@ -168,7 +179,7 @@ export default function HowItWorksPage() {
       {/* Steps */}
       <section className="bg-background py-20">
         <div className="container max-w-5xl">
-          <div className="space-y-16">
+          <div className="space-y-12">
             {STEPS.map((step, i) => (
               <motion.div
                 key={step.title}
@@ -176,15 +187,21 @@ export default function HowItWorksPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className={`flex flex-col ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-10 md:gap-16`}
+                className={`flex flex-col ${
+                  i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                } items-center gap-10 md:gap-16`}
               >
-                {/* Visual */}
+                {/* Visual: step card with large transparent number */}
                 <div className="flex-1 flex justify-center">
                   <div className="relative">
-                    <div className="flex size-32 items-center justify-center rounded-3xl bg-primary/10 shadow-lg">
+                    {/* Large transparent gold step number */}
+                    <span className="absolute -top-8 -left-4 font-display font-bold text-8xl text-primary/8 select-none pointer-events-none leading-none">
+                      {step.number}
+                    </span>
+                    <div className="flex size-32 items-center justify-center rounded-3xl bg-primary/10 border border-primary/20 shadow-gold relative z-10">
                       <step.icon className="size-14 text-primary" />
                     </div>
-                    <div className="absolute -top-3 -right-3 flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display font-bold text-sm shadow">
+                    <div className="absolute -top-3 -right-3 flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display font-bold text-sm shadow-gold z-20">
                       {i + 1}
                     </div>
                   </div>
@@ -200,7 +217,7 @@ export default function HowItWorksPage() {
                   <p className="text-muted-foreground leading-relaxed text-base mb-4">
                     {step.desc}
                   </p>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-secondary/10 text-secondary px-3 py-1 rounded-full">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20">
                     <CheckCircle2 className="size-3" />
                     {step.detail}
                   </span>
@@ -212,7 +229,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* Vendor Benefits */}
-      <section className="bg-muted/30 py-20 border-y border-border/40">
+      <section className="bg-muted/20 py-20 border-y border-border/40">
         <div className="container max-w-5xl">
           <div className="text-center mb-12">
             <h2 className="font-display font-bold text-4xl mb-3">
@@ -231,9 +248,9 @@ export default function HowItWorksPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm"
+                className="glass-card rounded-2xl p-6 border-t-2 border-t-primary/40 hover-lift"
               >
-                <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 mb-4">
+                <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 mb-4">
                   <b.icon className="size-5 text-primary" />
                 </div>
                 <h3 className="font-display font-semibold text-lg mb-2">
@@ -268,10 +285,10 @@ export default function HowItWorksPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex flex-col items-start gap-3 p-6 rounded-2xl border border-border/60 bg-card shadow-sm"
+                className="flex flex-col items-start gap-3 p-6 glass-card rounded-2xl border-t-2 border-t-primary/30 hover-lift"
               >
-                <div className="flex size-11 items-center justify-center rounded-xl bg-secondary/10">
-                  <pt.icon className="size-5 text-secondary" />
+                <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+                  <pt.icon className="size-5 text-primary" />
                 </div>
                 <h3 className="font-display font-semibold text-lg">
                   {pt.title}
@@ -286,7 +303,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-muted/30 py-20 border-y border-border/40">
+      <section className="bg-muted/20 py-20 border-y border-border/40">
         <div className="container max-w-3xl">
           <div className="text-center mb-12">
             <h2 className="font-display font-bold text-4xl mb-3">
@@ -305,12 +322,16 @@ export default function HowItWorksPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-primary py-20">
-        <div className="container max-w-3xl text-center">
-          <h2 className="font-display font-bold text-4xl text-primary-foreground mb-4">
+      <section className="bg-card border-t border-border/40 py-20 relative overflow-hidden">
+        {/* Gold glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-32 rounded-full bg-primary/8 blur-3xl" />
+        </div>
+        <div className="container max-w-3xl text-center relative z-10">
+          <h2 className="font-display font-bold text-4xl gold-gradient mb-4">
             Ready to Book Your Stall?
           </h2>
-          <p className="text-primary-foreground/80 text-lg mb-8">
+          <p className="text-muted-foreground text-lg mb-8">
             Browse 100+ verified food stall vendors across Bihar and book in
             minutes.
           </p>
@@ -320,8 +341,7 @@ export default function HowItWorksPage() {
           >
             <Button
               size="lg"
-              variant="secondary"
-              className="gap-2"
+              className="gap-2 bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
               data-ocid="how-it-works.browse_cta_button"
             >
               Browse Stalls <ArrowRight className="size-4" />

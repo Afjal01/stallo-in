@@ -168,7 +168,7 @@ export default function VendorOrderDetailPage() {
 
         {/* Status timeline */}
         {!isCancelled && (
-          <Card className="border-border/60">
+          <Card className="border-border/60 glass-card">
             <CardContent className="p-5">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 Order Progress

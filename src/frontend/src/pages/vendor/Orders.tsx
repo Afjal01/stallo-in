@@ -124,8 +124,11 @@ function OrderRow({
           <StatusBadge status={booking.bookingStatus} />
         </div>
         <p className="text-xs text-muted-foreground mt-0.5">
-          {formatDate(booking.eventDate)} · {Number(booking.guestCount)} guests
-          · {formatPrice(booking.totalPrice)}
+          <span className="text-primary font-medium">
+            {formatDate(booking.eventDate)}
+          </span>{" "}
+          · {Number(booking.guestCount)} guests ·{" "}
+          {formatPrice(booking.totalPrice)}
         </p>
         {booking.eventVenue && (
           <p className="text-xs text-muted-foreground truncate max-w-xs">

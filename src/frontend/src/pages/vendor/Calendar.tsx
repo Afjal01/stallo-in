@@ -207,7 +207,7 @@ export default function VendorCalendarPage() {
               {DAY_HEADERS.map((d) => (
                 <div
                   key={d}
-                  className="text-center text-[11px] font-semibold text-muted-foreground py-1.5"
+                  className="text-center text-[11px] font-semibold text-primary/60 py-1.5 uppercase tracking-widest"
                 >
                   {d}
                 </div>

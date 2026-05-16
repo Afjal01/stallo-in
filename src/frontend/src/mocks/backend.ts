@@ -116,6 +116,8 @@ const mockBookings = [
     totalPrice: BigInt(2500000),
     packageId: "pkg-1",
     eventDate: FUTURE,
+    commissionAmount: BigInt(0),
+    vendorPayout: BigInt(0),
   },
   {
     id: "booking-2",
@@ -134,6 +136,8 @@ const mockBookings = [
     totalPrice: BigInt(1500000),
     packageId: "pkg-2",
     eventDate: BigInt(Date.now() + 60 * 24 * 60 * 60 * 1000) * BigInt(1_000_000),
+    commissionAmount: BigInt(0),
+    vendorPayout: BigInt(0),
   },
 ];
 
@@ -166,7 +170,12 @@ const mockPackages = [
 
 export const mockBackend: backendInterface = {
   // Vendor operations
-  listVendors: async (_filter) => mockVendors,
+  listVendors: async (_filter, _offset, _limit) => ({
+    items: mockVendors,
+    total: BigInt(mockVendors.length),
+    offset: BigInt(0),
+    limit: BigInt(100),
+  }),
   getVendor: async (vendorId) => mockVendors.find(v => v.id === vendorId) ?? null,
   createVendorProfile: async (req) => ({
     ...req,
@@ -198,7 +207,12 @@ export const mockBackend: backendInterface = {
   deletePackage: async () => undefined,
 
   // Booking operations
-  listBookings: async (_filter) => mockBookings,
+  listBookings: async (_filter, _offset, _limit) => ({
+    items: mockBookings,
+    total: BigInt(mockBookings.length),
+    offset: BigInt(0),
+    limit: BigInt(200),
+  }),
   getBooking: async (bookingId) => mockBookings.find(b => b.id === bookingId) ?? null,
   createBooking: async (req) => ({
     id: "booking-new",
@@ -211,13 +225,15 @@ export const mockBackend: backendInterface = {
     advanceAmount: BigInt(500000),
     totalPrice: BigInt(2500000),
     customerId: { toText: () => "eeeee-ee" } as any,
+    commissionAmount: BigInt(0),
+    vendorPayout: BigInt(0),
   }),
-  cancelBooking: async () => mockBookings[0],
-  updateBookingStatus: async (bookingId, status) => ({ ...mockBookings[0], id: bookingId, bookingStatus: status }),
+  cancelBooking: async () => ({ ...mockBookings[0], commissionAmount: BigInt(0), vendorPayout: BigInt(0) }),
+  updateBookingStatus: async (bookingId, status) => ({ ...mockBookings[0], id: bookingId, bookingStatus: status, commissionAmount: BigInt(0), vendorPayout: BigInt(0) }),
   calculateCancellationFee: async () => BigInt(250000),
 
   // Payment
-  confirmPayment: async (bookingId) => ({ ...mockBookings[0], id: bookingId, paymentStatus: PaymentStatus.paid }),
+  confirmPayment: async (bookingId) => ({ ...mockBookings[0], id: bookingId, paymentStatus: PaymentStatus.paid, commissionAmount: BigInt(0), vendorPayout: BigInt(0) }),
   createCheckoutSession: async () => "https://checkout.stripe.com/mock_session",
   getStripeSessionStatus: async () => ({ __kind__: "completed", completed: { response: "paid", userPrincipal: undefined } }),
   isStripeConfigured: async () => true,
@@ -257,6 +273,7 @@ export const mockBackend: backendInterface = {
   // Analytics
   getAnalyticsSummary: async () => ({
     commissionRevenue: BigInt(150000),
+    vendorPayouts: BigInt(0),
     cancelledBookings: BigInt(5),
     totalBookings: BigInt(87),
     completedBookings: BigInt(62),
@@ -264,12 +281,13 @@ export const mockBackend: backendInterface = {
     totalCustomers: BigInt(74),
     totalVendors: BigInt(18),
     activeVendors: BigInt(14),
+    topVendors: [],
   }),
-  getBookingsByDateRange: async () => [
+  getBookingsByDateRange: async (_from, _to, _groupBy) => [
     { date: NOW, count: BigInt(12), revenue: BigInt(3000000) },
     { date: BigInt(Date.now() - 7 * 24 * 60 * 60 * 1000) * BigInt(1_000_000), count: BigInt(8), revenue: BigInt(2000000) },
   ],
-  getRevenueByDateRange: async () => [
+  getRevenueByDateRange: async (_from, _to, _groupBy) => [
     { date: NOW, count: BigInt(12), revenue: BigInt(3000000) },
     { date: BigInt(Date.now() - 7 * 24 * 60 * 60 * 1000) * BigInt(1_000_000), count: BigInt(8), revenue: BigInt(2000000) },
   ],
@@ -303,6 +321,9 @@ export const mockBackend: backendInterface = {
       status: ApprovalStatus.pending,
     },
   ],
+
+  // Category breakdown
+  getCategoryBreakdown: async () => [],
 
   // Availability
   getUnavailableDates: async () => [],

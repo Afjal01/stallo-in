@@ -21,6 +21,13 @@ module {
     createdAt : CommonTypes.Timestamp;
   };
 
+  public type PagedVendors = {
+    items : [Vendor];
+    total : Nat;
+    offset : Nat;
+    limit : Nat;
+  };
+
   public type VendorFilter = {
     category : ?Text;
     serviceArea : ?Text;

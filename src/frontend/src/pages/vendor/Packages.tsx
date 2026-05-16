@@ -182,7 +182,12 @@ export default function VendorPackagesPage() {
       title="Packages"
       subtitle="Manage your stall pricing packages"
       actions={
-        <Button size="sm" onClick={openAdd} data-ocid="packages.add_button">
+        <Button
+          size="sm"
+          className="shadow-gold"
+          onClick={openAdd}
+          data-ocid="packages.add_button"
+        >
           <Plus className="size-4 mr-1" /> Add Package
         </Button>
       }
@@ -195,7 +200,7 @@ export default function VendorPackagesPage() {
         </div>
       ) : packages.length === 0 ? (
         <div
-          className="rounded-xl border border-border/60 bg-card p-12 text-center"
+          className="rounded-xl border border-border/60 bg-card p-12 text-center glass-card"
           data-ocid="packages.empty_state"
         >
           <PackageIcon className="size-10 text-muted-foreground mx-auto mb-3" />
@@ -214,7 +219,7 @@ export default function VendorPackagesPage() {
           {packages.map((pkg, i) => (
             <Card
               key={pkg.id}
-              className="border-border/60 hover:shadow-sm transition-smooth"
+              className="border-border/60 hover:shadow-sm transition-smooth hover-lift glass-card"
               data-ocid={`packages.item.${i + 1}`}
             >
               <CardContent className="p-5 space-y-3">
@@ -438,7 +443,7 @@ export default function VendorPackagesPage() {
               </Button>
               <Button
                 type="submit"
-                className="flex-1"
+                className="flex-1 shadow-gold"
                 disabled={isSaving}
                 data-ocid="packages.submit_button"
               >

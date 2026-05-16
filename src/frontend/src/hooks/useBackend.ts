@@ -33,7 +33,8 @@ export function useVendors(filter: VendorFilter = {}) {
     queryKey: ["vendors", filter],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.listVendors(filter);
+      const result = await actor.listVendors(filter, BigInt(0), BigInt(100));
+      return result.items;
     },
     enabled: !!actor && !isFetching,
     staleTime: 2 * 60 * 1000,
@@ -96,7 +97,8 @@ export function useBookings(filter: BookingFilter = {}) {
     queryKey: ["bookings", filter],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.listBookings(filter);
+      const result = await actor.listBookings(filter, BigInt(0), BigInt(200));
+      return result.items;
     },
     enabled: !!actor && !isFetching,
   });
@@ -120,7 +122,7 @@ export function useBookingsByDateRange(from: Timestamp, to: Timestamp) {
     queryKey: ["bookingsByDateRange", from, to],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getBookingsByDateRange(from, to);
+      return actor.getBookingsByDateRange(from, to, null);
     },
     enabled: !!actor && !isFetching,
   });
@@ -132,7 +134,7 @@ export function useRevenueByDateRange(from: Timestamp, to: Timestamp) {
     queryKey: ["revenueByDateRange", from, to],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getRevenueByDateRange(from, to);
+      return actor.getRevenueByDateRange(from, to, null);
     },
     enabled: !!actor && !isFetching,
   });

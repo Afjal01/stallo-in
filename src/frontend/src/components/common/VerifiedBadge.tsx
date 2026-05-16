@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { VendorStatus } from "@/types";
-import { ShieldCheck, ShieldX } from "lucide-react";
+import { Clock, ShieldCheck, ShieldX } from "lucide-react";
 
 interface VerifiedBadgeProps {
   status: VendorStatus;
@@ -13,18 +13,38 @@ export function VerifiedBadge({
   className,
   size = "sm",
 }: VerifiedBadgeProps) {
-  if (status !== VendorStatus.approved) {
+  const iconSize = size === "sm" ? "size-3" : "size-4";
+  const baseClasses = cn(
+    "inline-flex items-center gap-1 rounded-full font-semibold",
+    size === "sm" ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm",
+  );
+
+  if (status === VendorStatus.approved) {
     return (
       <span
         className={cn(
-          "inline-flex items-center gap-1 rounded-full font-medium",
-          size === "sm" ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm",
-          "bg-muted text-muted-foreground",
+          baseClasses,
+          "bg-primary/15 text-primary border border-primary/30 shadow-[0_0_8px_oklch(var(--primary)/0.2)]",
           className,
         )}
       >
-        <ShieldX className={size === "sm" ? "size-3" : "size-4"} />
-        Unverified
+        <ShieldCheck className={cn(iconSize, "shrink-0")} />
+        Verified
+      </span>
+    );
+  }
+
+  if (status === VendorStatus.pending) {
+    return (
+      <span
+        className={cn(
+          baseClasses,
+          "bg-amber-500/10 text-amber-400 border border-amber-500/25",
+          className,
+        )}
+      >
+        <Clock className={cn(iconSize, "shrink-0")} />
+        Pending Review
       </span>
     );
   }
@@ -32,14 +52,13 @@ export function VerifiedBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full font-medium",
-        size === "sm" ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm",
-        "bg-primary/10 text-primary border border-primary/20",
+        baseClasses,
+        "bg-rose-500/10 text-rose-400 border border-rose-500/25",
         className,
       )}
     >
-      <ShieldCheck className={size === "sm" ? "size-3" : "size-4"} />
-      Verified
+      <ShieldX className={cn(iconSize, "shrink-0")} />
+      Not Verified
     </span>
   );
 }

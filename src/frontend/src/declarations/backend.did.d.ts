@@ -12,8 +12,10 @@ import type { Principal } from '@icp-sdk/core/principal';
 
 export interface AnalyticsSummary {
   'commissionRevenue' : bigint,
+  'vendorPayouts' : bigint,
   'cancelledBookings' : bigint,
   'totalBookings' : bigint,
+  'topVendors' : Array<VendorBookingStat>,
   'completedBookings' : bigint,
   'totalRevenue' : bigint,
   'totalCustomers' : bigint,
@@ -34,6 +36,8 @@ export interface Booking {
   'advanceAmount' : bigint,
   'vendorId' : VendorId,
   'notes' : [] | [string],
+  'vendorPayout' : bigint,
+  'commissionAmount' : bigint,
   'eventVenue' : string,
   'customerId' : UserId,
   'stripePaymentIntentId' : [] | [string],
@@ -62,6 +66,12 @@ export interface CancellationPolicy {
   'tier2FeePercent' : bigint,
   'tier2Days' : bigint,
 }
+export interface CategoryBreakdown {
+  'categoryId' : string,
+  'revenue' : bigint,
+  'categoryName' : string,
+  'bookingCount' : bigint,
+}
 export interface CreateBookingRequest {
   'guestCount' : bigint,
   'vendorId' : VendorId,
@@ -87,6 +97,18 @@ export interface DateRangeResult {
 }
 export type ExternalBlob = Uint8Array;
 export type PackageId = string;
+export interface PagedBookings {
+  'total' : bigint,
+  'offset' : bigint,
+  'limit' : bigint,
+  'items' : Array<Booking>,
+}
+export interface PagedVendors {
+  'total' : bigint,
+  'offset' : bigint,
+  'limit' : bigint,
+  'items' : Array<Vendor>,
+}
 export type PaymentStatus = { 'pending' : null } |
   { 'paid' : null } |
   { 'refunded' : null } |
@@ -180,6 +202,12 @@ export interface Vendor {
   'verificationStatus' : VendorStatus,
   'photos' : Array<ExternalBlob>,
 }
+export interface VendorBookingStat {
+  'revenue' : bigint,
+  'vendorId' : VendorId,
+  'vendorName' : string,
+  'bookingCount' : bigint,
+}
 export interface VendorFilter {
   'serviceArea' : [] | [string],
   'status' : [] | [VendorStatus],
@@ -259,14 +287,15 @@ export interface _SERVICE {
   'getAnalyticsSummary' : ActorMethod<[], AnalyticsSummary>,
   'getBooking' : ActorMethod<[BookingId], [] | [Booking]>,
   'getBookingsByDateRange' : ActorMethod<
-    [Timestamp, Timestamp],
+    [Timestamp, Timestamp, [] | [string]],
     Array<DateRangeResult>
   >,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getCategoryBreakdown' : ActorMethod<[], Array<CategoryBreakdown>>,
   'getPackage' : ActorMethod<[PackageId], [] | [StallPackage]>,
   'getPlatformConfig' : ActorMethod<[], PlatformConfig>,
   'getRevenueByDateRange' : ActorMethod<
-    [Timestamp, Timestamp],
+    [Timestamp, Timestamp, [] | [string]],
     Array<DateRangeResult>
   >,
   'getReviewsByVendor' : ActorMethod<[VendorId], Array<Review>>,
@@ -277,9 +306,9 @@ export interface _SERVICE {
   'isCallerApproved' : ActorMethod<[], boolean>,
   'isStripeConfigured' : ActorMethod<[], boolean>,
   'listApprovals' : ActorMethod<[], Array<UserApprovalInfo>>,
-  'listBookings' : ActorMethod<[BookingFilter], Array<Booking>>,
+  'listBookings' : ActorMethod<[BookingFilter, bigint, bigint], PagedBookings>,
   'listPackagesByVendor' : ActorMethod<[VendorId], Array<StallPackage>>,
-  'listVendors' : ActorMethod<[VendorFilter], Array<Vendor>>,
+  'listVendors' : ActorMethod<[VendorFilter, bigint, bigint], PagedVendors>,
   'markUnavailableDate' : ActorMethod<[VendorId, Timestamp], undefined>,
   'processRefund' : ActorMethod<[BookingId], undefined>,
   'rejectVendor' : ActorMethod<[VendorId], undefined>,

@@ -25,7 +25,7 @@ function EmptyTab({ message }: { message: string }) {
       className="rounded-xl border border-border/60 bg-card p-10 text-center"
       data-ocid="bookings.empty_state"
     >
-      <ShoppingBag className="size-10 text-muted-foreground mx-auto mb-3" />
+      <ShoppingBag className="size-10 text-primary mx-auto mb-3" />
       <p className="font-semibold text-foreground mb-1">{message}</p>
       <p className="text-sm text-muted-foreground mb-4">
         Book a verified food stall for your event
@@ -54,7 +54,7 @@ function BookingRow({
 }) {
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-border/60 bg-card p-4 hover:shadow-sm transition-smooth"
+      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-border/60 bg-card p-4 hover:shadow-sm transition-smooth hover-lift"
       data-ocid={`bookings.item.${index + 1}`}
     >
       {/* Left: info */}
@@ -67,7 +67,7 @@ function BookingRow({
           <StatusBadge status={booking.paymentStatus} paymentMode />
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 text-primary">
             <CalendarDays className="size-3" />
             {formatDate(booking.eventDate)}
           </span>

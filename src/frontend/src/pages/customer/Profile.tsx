@@ -67,7 +67,7 @@ export default function CustomerProfilePage() {
     >
       <div className="max-w-2xl space-y-6">
         {/* Identity */}
-        <Card className="border-border/60">
+        <Card className="glass-card border-border/60">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary/15">
@@ -96,7 +96,7 @@ export default function CustomerProfilePage() {
                   id="principal"
                   readOnly
                   value={principalStr}
-                  className="font-mono text-xs pr-20 bg-muted/40"
+                  className="font-mono text-xs pr-20 bg-muted/40 focus:ring-primary/50 focus:border-primary/50"
                   data-ocid="profile.principal.input"
                 />
                 <Button
@@ -122,7 +122,7 @@ export default function CustomerProfilePage() {
         </Card>
 
         {/* Saved addresses */}
-        <Card className="border-border/60">
+        <Card className="glass-card border-border/60">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
               <MapPin className="size-4 text-muted-foreground" />
@@ -172,7 +172,7 @@ export default function CustomerProfilePage() {
                 value={newAddress}
                 onChange={(e) => setNewAddress(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleAddAddress()}
-                className="flex-1"
+                className="flex-1 focus:ring-primary/50 focus:border-primary/50"
                 data-ocid="profile.new_address.input"
               />
               <Button
@@ -190,7 +190,7 @@ export default function CustomerProfilePage() {
         </Card>
 
         {/* Notification preferences */}
-        <Card className="border-border/60">
+        <Card className="glass-card border-border/60">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
               <Bell className="size-4 text-muted-foreground" />

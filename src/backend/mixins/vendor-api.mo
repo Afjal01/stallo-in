@@ -16,7 +16,10 @@ mixin (
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Must be authenticated");
     };
-    VendorLib.createVendorProfile(vendorState, caller, req);
+    switch (VendorLib.createVendorProfile(vendorState, caller, req)) {
+      case (#ok(v)) { v };
+      case (#err(e)) { Runtime.trap(e) };
+    };
   };
 
   public shared ({ caller }) func updateVendorProfile(
@@ -36,9 +39,11 @@ mixin (
   };
 
   public query func listVendors(
-    filter : VendorTypes.VendorFilter
-  ) : async [VendorTypes.Vendor] {
-    VendorLib.listVendors(vendorState, filter);
+    filter : VendorTypes.VendorFilter,
+    offset : Nat,
+    limit : Nat,
+  ) : async VendorTypes.PagedVendors {
+    VendorLib.listVendors(vendorState, filter, offset, limit);
   };
 
   public shared ({ caller }) func approveVendor(

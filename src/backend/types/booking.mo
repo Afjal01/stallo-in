@@ -24,6 +24,8 @@ module {
     guestCount : Nat;
     totalPrice : Nat;
     advanceAmount : Nat;
+    commissionAmount : Nat;
+    vendorPayout : Nat;
     cancellationFeePercent : Nat;
     bookingStatus : CommonTypes.BookingStatus;
     paymentStatus : CommonTypes.PaymentStatus;
@@ -69,11 +71,41 @@ module {
     cancelledBookings : Nat;
     totalRevenue : Nat;
     commissionRevenue : Nat;
+    vendorPayouts : Nat;
+    topVendors : [VendorBookingStat];
+  };
+
+  public type VendorBookingStat = {
+    vendorId : CommonTypes.VendorId;
+    vendorName : Text;
+    bookingCount : Nat;
+    revenue : Nat;
+  };
+
+  public type CategoryBreakdown = {
+    categoryId : Text;
+    categoryName : Text;
+    bookingCount : Nat;
+    revenue : Nat;
   };
 
   public type DateRangeResult = {
     date : CommonTypes.Timestamp;
     count : Nat;
     revenue : Nat;
+  };
+
+  public type PagedVendors = {
+    items : [VendorBookingStat]; // reused for generic paged results when needed
+    total : Nat;
+    offset : Nat;
+    limit : Nat;
+  };
+
+  public type PagedBookings = {
+    items : [Booking];
+    total : Nat;
+    offset : Nat;
+    limit : Nat;
   };
 };

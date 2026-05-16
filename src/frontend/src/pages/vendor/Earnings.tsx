@@ -275,19 +275,19 @@ export default function VendorEarningsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border/60">
-                    <th className="text-left px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-widest text-[11px] text-primary/60">
                       Event Date
                     </th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-widest text-[11px] text-primary/60">
                       Guests
                     </th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-widest text-[11px] text-primary/60">
                       Total
                     </th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-widest text-[11px] text-primary/60">
                       Commission (10%)
                     </th>
-                    <th className="text-right px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-widest text-[11px] text-primary/60">
                       Net Earnings
                     </th>
                   </tr>

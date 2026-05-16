@@ -12,57 +12,48 @@ const STATUS_CONFIG: Record<string, { label: string; classes: string }> = {
   // Booking statuses
   [BookingStatus.pending]: {
     label: "Pending",
-    classes:
-      "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/40",
+    classes: "bg-amber-500/15 text-amber-300 border-amber-400/30",
   },
   [BookingStatus.confirmed]: {
     label: "Confirmed",
-    classes:
-      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/40",
+    classes: "bg-blue-500/15 text-blue-300 border-blue-400/30",
   },
   [BookingStatus.preparing]: {
     label: "Preparing",
-    classes:
-      "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800/40",
+    classes: "bg-purple-500/15 text-purple-300 border-purple-400/30",
   },
   [BookingStatus.dispatched]: {
     label: "Dispatched",
-    classes:
-      "bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900/20 dark:text-indigo-300 dark:border-indigo-800/40",
+    classes: "bg-cyan-500/15 text-cyan-300 border-cyan-400/30",
   },
   [BookingStatus.completed]: {
     label: "Completed",
-    classes:
-      "bg-secondary/15 text-secondary border-secondary/30 dark:bg-secondary/20 dark:text-secondary dark:border-secondary/40",
+    classes: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
   },
   [BookingStatus.cancelled]: {
     label: "Cancelled",
-    classes:
-      "bg-destructive/10 text-destructive border-destructive/20 dark:bg-destructive/20 dark:border-destructive/40",
+    classes: "bg-rose-500/15 text-rose-300 border-rose-400/30",
   },
   // Payment statuses
   [`payment_${PaymentStatus.pending}`]: {
     label: "Payment Pending",
-    classes:
-      "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300",
+    classes: "bg-amber-500/15 text-amber-300 border-amber-400/30",
   },
   [PaymentStatus.paid]: {
     label: "Paid",
-    classes:
-      "bg-secondary/15 text-secondary border-secondary/30 dark:bg-secondary/20 dark:text-secondary",
+    classes: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
   },
   [PaymentStatus.partiallyPaid]: {
     label: "Partially Paid",
-    classes:
-      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300",
+    classes: "bg-blue-500/15 text-blue-300 border-blue-400/30",
   },
   [PaymentStatus.failed]: {
     label: "Payment Failed",
-    classes: "bg-destructive/10 text-destructive border-destructive/20",
+    classes: "bg-rose-500/15 text-rose-300 border-rose-400/30",
   },
   [PaymentStatus.refunded]: {
     label: "Refunded",
-    classes: "bg-muted text-muted-foreground border-border",
+    classes: "bg-muted/60 text-muted-foreground border-border/60",
   },
 };
 

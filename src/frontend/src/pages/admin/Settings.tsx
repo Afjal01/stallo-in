@@ -162,6 +162,7 @@ export default function AdminSettings() {
                   max={100}
                   {...numField("globalCommissionPercent")}
                   data-ocid="admin.settings.commission.input"
+                  className="w-full focus:ring-primary/50 focus:border-primary/50"
                 />
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
                   <Info className="size-3" /> Applied to all bookings unless
@@ -175,6 +176,7 @@ export default function AdminSettings() {
                   max={100}
                   {...numField("advancePaymentPercent")}
                   data-ocid="admin.settings.advance.input"
+                  className="w-full focus:ring-primary/50 focus:border-primary/50"
                 />
                 <p className="text-xs text-muted-foreground">
                   Typically 50 or 100.

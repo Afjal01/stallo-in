@@ -40,11 +40,11 @@ function VendorStatusBadge({ status }: { status: VendorStatus }) {
   const map: Record<VendorStatus, { label: string; classes: string }> = {
     [VendorStatus.pending]: {
       label: "Pending",
-      classes: "bg-amber-100 text-amber-800 border-amber-200",
+      classes: "bg-amber-400/15 text-amber-400 border-amber-400/30",
     },
     [VendorStatus.approved]: {
       label: "Approved",
-      classes: "bg-secondary/15 text-secondary border-secondary/30",
+      classes: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
     },
     [VendorStatus.rejected]: {
       label: "Rejected",
@@ -174,30 +174,29 @@ function PendingTable({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border bg-muted/40">
-              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+            <tr className="border-b border-border/60 bg-muted/20">
+              <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest">
                 Vendor
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground hidden sm:table-cell">
+              <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest hidden sm:table-cell">
                 Category
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground hidden md:table-cell">
+              <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest hidden md:table-cell">
                 Service Area
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground hidden lg:table-cell">
+              <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest hidden lg:table-cell">
                 Applied
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+              <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {filtered.map((v, i) => (
+            {filtered.map((v, _i) => (
               <tr
                 key={v.id}
-                className="hover:bg-muted/30 transition-colors"
-                data-ocid={`admin.pending_vendors.item.${i + 1}`}
+                className="hover:bg-muted/20 transition-colors odd:bg-muted/5"
               >
                 <td className="px-4 py-3">
                   <p className="font-semibold">{v.businessName}</p>
@@ -217,19 +216,17 @@ function PendingTable({
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"
-                      className="gap-1.5 h-8 text-xs"
                       onClick={() => handleApprove(v)}
                       disabled={approve.isPending}
-                      data-ocid={`admin.pending_vendors.approve.${i + 1}`}
+                      className="gap-1.5 h-8 text-xs shadow-gold"
                     >
                       <CheckCircle className="size-3.5" /> Approve
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="gap-1.5 h-8 text-xs text-destructive hover:text-destructive"
                       onClick={() => setRejectTarget(v)}
-                      data-ocid={`admin.pending_vendors.reject.${i + 1}`}
+                      className="gap-1.5 h-8 text-xs text-destructive border-destructive/30 hover:bg-destructive/10"
                     >
                       <XCircle className="size-3.5" /> Reject
                     </Button>
@@ -287,23 +284,23 @@ function ActiveTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border bg-muted/40">
-            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+          <tr className="border-b border-border/60 bg-muted/20">
+            <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest">
               Vendor
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground hidden sm:table-cell">
+            <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest hidden sm:table-cell">
               Category
             </th>
-            <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground hidden md:table-cell">
+            <th className="px-4 py-3 text-right text-[10px] font-bold text-primary/70 uppercase tracking-widest hidden md:table-cell">
               Rating
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+            <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest">
               Status
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+            <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest">
               Featured
             </th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">
+            <th className="px-4 py-3 text-left text-[10px] font-bold text-primary/70 uppercase tracking-widest">
               View
             </th>
           </tr>
@@ -312,8 +309,7 @@ function ActiveTable({
           {filtered.map((v, i) => (
             <tr
               key={v.id}
-              className="hover:bg-muted/30 transition-colors"
-              data-ocid={`admin.vendors.item.${i + 1}`}
+              className="hover:bg-muted/20 transition-colors odd:bg-muted/5"
             >
               <td className="px-4 py-3">
                 <p className="font-semibold">{v.businessName}</p>
@@ -342,7 +338,7 @@ function ActiveTable({
                   data-ocid={`admin.vendors.featured_toggle.${i + 1}`}
                 >
                   {v.isFeatured ? (
-                    <ToggleRight className="size-6 text-primary" />
+                    <ToggleRight className="size-6 text-primary drop-shadow-[0_0_4px_hsl(var(--primary)/0.6)]" />
                   ) : (
                     <ToggleLeft className="size-6" />
                   )}
@@ -421,7 +417,7 @@ export default function AdminVendors() {
             </TabsTrigger>
           </TabsList>
 
-          <div className="mt-4 rounded-lg border border-border bg-card overflow-hidden">
+          <div className="mt-4 rounded-lg border border-border/50 bg-card overflow-hidden glass-card">
             {isLoading ? (
               <div className="p-4 space-y-3">
                 {[1, 2, 3].map((i) => (

@@ -62,8 +62,12 @@ export default function AboutPage() {
   return (
     <RootLayout>
       {/* Hero */}
-      <section className="bg-card border-b border-border/40 py-16 md:py-24">
-        <div className="container max-w-4xl text-center">
+      <section className="bg-card border-b border-border/40 py-20 md:py-28 relative overflow-hidden">
+        {/* Decorative gold glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-64 rounded-full bg-primary/5 blur-3xl" />
+        </div>
+        <div className="container max-w-4xl text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -71,12 +75,12 @@ export default function AboutPage() {
           >
             <Badge
               variant="outline"
-              className="mb-4 text-primary border-primary/30"
+              className="mb-4 text-primary border-primary/40 bg-primary/5"
             >
-              Our Story
+              ✦ Our Story
             </Badge>
             <h1 className="font-display font-bold text-5xl md:text-6xl mb-5 leading-tight">
-              Built in Bihar, <span className="text-primary">For Bihar</span>
+              Built in Bihar, <span className="gold-gradient">For Bihar</span>
             </h1>
             <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
               Stallo.in is the trusted premium platform for booking verified
@@ -95,13 +99,13 @@ export default function AboutPage() {
             {STATS.map((stat, i) => (
               <motion.div
                 key={stat.label}
-                className="rounded-xl border border-border/60 bg-card p-6 text-center shadow-xs"
+                className="glass-card rounded-xl p-6 text-center hover-lift"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
-                <p className="font-display font-bold text-4xl text-primary">
+                <p className="font-display font-bold text-4xl gold-gradient">
                   {stat.number}
                 </p>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -114,7 +118,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section className="bg-muted/30 border-y border-border/40 py-16">
+      <section className="bg-muted/20 border-y border-border/40 py-16">
         <div className="container max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -124,9 +128,9 @@ export default function AboutPage() {
           >
             <Badge
               variant="outline"
-              className="mb-4 text-primary border-primary/30"
+              className="mb-4 text-primary border-primary/40 bg-primary/5"
             >
-              Our Mission
+              ✦ Our Mission
             </Badge>
             <h2 className="font-display font-bold text-3xl md:text-4xl mb-5">
               Bringing premium food experiences to every wedding in Bihar
@@ -161,9 +165,9 @@ export default function AboutPage() {
           >
             <Badge
               variant="outline"
-              className="mb-3 text-primary border-primary/30"
+              className="mb-3 text-primary border-primary/40 bg-primary/5"
             >
-              Our Values
+              ✦ Our Values
             </Badge>
             <h2 className="font-display font-bold text-3xl md:text-4xl">
               What We Stand For
@@ -173,13 +177,13 @@ export default function AboutPage() {
             {VALUES.map((v, i) => (
               <motion.div
                 key={v.title}
-                className="flex gap-4 rounded-xl border border-border/60 bg-card p-6 shadow-xs"
+                className="flex gap-4 glass-card rounded-xl p-6 hover-lift"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
                   <v.icon className="size-5 text-primary" />
                 </div>
                 <div>
@@ -197,7 +201,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="bg-muted/30 border-y border-border/40 py-16">
+      <section className="bg-muted/20 border-y border-border/40 py-16">
         <div className="container">
           <motion.div
             className="text-center mb-10"
@@ -208,9 +212,9 @@ export default function AboutPage() {
           >
             <Badge
               variant="outline"
-              className="mb-3 text-primary border-primary/30"
+              className="mb-3 text-primary border-primary/40 bg-primary/5"
             >
-              Our Team
+              ✦ Our Team
             </Badge>
             <h2 className="font-display font-bold text-3xl md:text-4xl">
               The People Behind Stallo
@@ -225,9 +229,9 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
               >
-                <Card className="text-center border-border/60 shadow-xs">
+                <Card className="text-center glass-card shadow-gold hover-lift">
                   <CardContent className="p-6">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xl mx-auto mb-3">
+                    <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xl mx-auto mb-3">
                       {member.initials}
                     </div>
                     <h3 className="font-display font-semibold text-lg">
@@ -250,14 +254,19 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="bg-background py-16">
         <div className="container max-w-2xl text-center">
-          <Separator className="mb-10 opacity-50" />
+          <Separator className="mb-10 opacity-20" />
           <h2 className="font-display font-bold text-3xl mb-4">
             Ready to book your perfect stalls?
           </h2>
           <p className="text-muted-foreground mb-6">
             Browse 50+ verified vendors and start planning your wedding today.
           </p>
-          <Button size="lg" asChild data-ocid="about.cta_button">
+          <Button
+            size="lg"
+            asChild
+            className="bg-primary text-primary-foreground shadow-gold hover:bg-primary/90"
+            data-ocid="about.cta_button"
+          >
             <Link
               to="/browse"
               search={{ category: undefined, search: undefined }}
